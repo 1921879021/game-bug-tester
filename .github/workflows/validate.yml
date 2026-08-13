@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Validate portable skill structure
-        run: ./scripts/check-structure.sh
+        run: bash scripts/check-structure.sh
       - name: Check release-critical files
         run: |
           test -f VERSION
