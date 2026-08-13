@@ -1,0 +1,17 @@
+profile_summary: {}
+genre_profile: generic
+budget: standard
+generated_tests:
+- id: TC-001
+  source: bug_catalog|state_combo
+  mode: EDGE
+  features: []
+  target_bug_ids: []
+  priority_score: 0
+  preconditions: []
+  steps: []
+  expected: ''
+  oracle: ''
+  evidence: []
+  safety: safe
+  execution_level: manual_or_adapter

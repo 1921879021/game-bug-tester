@@ -1,0 +1,10 @@
+version: 2.3.0
+game: ExampleGame
+transactions:
+  shop_purchase:
+    safe_to_execute: true
+    currency_role: coins_text
+    price_role: item_price_text
+    charge_model: displayed_price_exact   # only use if this is truly the game's rule
+    quantity: 1
+# Add project-specific rules here instead of editing the generic bug catalog.

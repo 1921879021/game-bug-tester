@@ -1,0 +1,23 @@
+version: 2.4.0
+gameplay:
+  actions:
+    move_forward: {binding: project_defined}
+    jump: {binding: project_defined}
+    dash: {binding: project_defined}
+    attack_primary: {binding: project_defined}
+  probes:
+    player_position: {type: vector3, source: project_defined}
+    player_alive: {type: bool, source: project_defined}
+    target_hp: {type: number, source: project_defined}
+templates:
+  movement_progress:
+    safe_to_execute: true
+    duration_ms: 800
+    min_distance: null
+  dash_collision_boundary:
+    safe_to_execute: true
+    allowed_bounds: null
+  combat_damage:
+    safe_to_execute: true
+    expected_damage: null
+    tolerance: 0

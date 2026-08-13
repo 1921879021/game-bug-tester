@@ -1,0 +1,67 @@
+version: 3.2.0
+safe_environment: true
+schedule:
+  offsets_ms:
+  - -15
+  - 0
+  - 15
+  repeats: 1
+  max_start_skew_ms: 250
+cases:
+- id: CLAIM
+  type: simultaneous_unique_claim
+  target_bug_ids:
+  - NET-008
+  actors:
+  - client_a
+  - client_b
+  object_id: orb-race
+- id: REWARD
+  type: concurrent_idempotent_reward
+  target_bug_ids:
+  - NET-002
+  - NET-007
+  - NET-014
+  actors:
+  - client_a
+  - client_b
+  request_id: reward-race-42
+  player_id: player_shared
+  amount: 100
+- id: PURCHASE-DISCONNECT
+  type: purchase_disconnect_atomicity
+  target_bug_ids:
+  - NET-016
+  actor: client_a
+  player_id: player_shared
+  cost: 100
+  item_id: sword
+  offsets_ms:
+  - 5
+  allowed_terminal_states:
+  - coins: 900
+    item_count: 1
+    ledger_count: 1
+  - coins: 1000
+    item_count: 0
+    ledger_count: 0
+- id: SKILL
+  type: concurrent_skill_guard
+  target_bug_ids:
+  - NET-017
+  actors:
+  - client_a
+  - client_b
+  player_id: player_shared
+  skill_id: dash
+  max_success_count: 1
+- id: HOST-MUTATE
+  type: host_migration_mutation
+  target_bug_ids:
+  - NET-018
+  host_id: client_a
+  mutation_executor: client_b
+  delta: 10
+  expected_terminal_state:
+    current_host: client_b
+    score: 15

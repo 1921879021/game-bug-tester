@@ -1,0 +1,145 @@
+enabled: true
+current_schema_version: 2
+fields:
+  coins:
+    scope: persistent
+    default: 100
+  inventory:
+    scope: persistent
+    default: []
+  quest_stage:
+    scope: persistent
+    default: 1
+  settings_volume:
+    scope: settings
+    default: 0.8
+  session_combo:
+    scope: session
+    default: 0
+actions:
+  reset_fixture: reset_persistence_fixture
+  set_fields: set_runtime_fields
+  save: save_game
+  load: load_game
+  interrupt_save: interrupt_save
+  transition_scene: transition_scene
+  corrupt_primary: corrupt_primary_save
+  seed_legacy: seed_legacy_save
+probes:
+  runtime_snapshot: runtime_snapshot
+  save_status: load_status
+  active_scene: active_scene
+  schema_version: schema_version
+contracts:
+  roundtrip:
+    enabled: true
+    fields:
+    - coins
+    - inventory
+    - quest_stage
+  latest_commit:
+    enabled: true
+    fields:
+    - coins
+    - inventory
+    - quest_stage
+  atomic_interruption:
+    enabled: true
+    fields:
+    - coins
+    - inventory
+    - quest_stage
+    recovery: previous_or_new_complete
+  scene_transition:
+    enabled: true
+    fields:
+    - coins
+    - inventory
+    - quest_stage
+    target_scene: Dungeon
+  settings_restart:
+    enabled: true
+    fields:
+    - settings_volume
+  corrupt_recovery:
+    enabled: true
+    fields:
+    - coins
+    - inventory
+    - quest_stage
+    behavior: fallback_backup
+  migration:
+    enabled: true
+    fields:
+    - coins
+    - inventory
+    - quest_stage
+    - settings_volume
+  session_reset:
+    enabled: true
+    fields:
+    - session_combo
+fixtures:
+  roundtrip_saved:
+    coins: 1250
+    inventory:
+    - iron_sword
+    - potion
+    quest_stage: 4
+  roundtrip_mutated:
+    coins: 12
+    inventory: []
+    quest_stage: 1
+  latest_a:
+    coins: 500
+    inventory:
+    - wood_sword
+    quest_stage: 2
+  latest_b:
+    coins: 900
+    inventory:
+    - steel_sword
+    - potion
+    quest_stage: 5
+  atomic_old:
+    coins: 300
+    inventory:
+    - old_blade
+    quest_stage: 2
+  atomic_new:
+    coins: 777
+    inventory:
+    - new_blade
+    - key
+    quest_stage: 6
+  scene_state:
+    coins: 640
+    inventory:
+    - map_key
+    quest_stage: 3
+  settings_state:
+    settings_volume: 0.25
+  recovery_backup:
+    coins: 200
+    inventory:
+    - backup_item
+    quest_stage: 2
+  recovery_primary:
+    coins: 800
+    inventory:
+    - primary_item
+    quest_stage: 7
+  legacy_save:
+    schema_version: 1
+    gold: 432
+    inventory:
+    - legacy_sword
+    quest_stage: 3
+  migration_expected:
+    coins: 432
+    inventory:
+    - legacy_sword
+    quest_stage: 3
+    settings_volume: 0.8
+  session_state:
+    session_combo: 99

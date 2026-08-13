@@ -1,0 +1,14 @@
+version: 2.6.0
+strategies:
+  GAME-001:
+    templates: [range_inside, los_clear]
+    focus: controlled single-hit damage correctness
+  GAME-006:
+    templates: [range_inside, range_outside, los_clear, los_blocked]
+    focus: attack boundary and conditional behavior
+  PHY-004:
+    templates: [los_blocked]
+    focus: obstruction candidate only; true projectile tunneling needs projectile-specific hooks
+  CHAR-001:
+    templates: []
+    focus: remains covered by v2.4 death_input_lock; combat model can later add dead-target/source variants

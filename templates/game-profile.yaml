@@ -1,0 +1,13 @@
+build: unknown
+platform: unknown
+engine: unknown
+genre: unknown
+network: unknown
+features: []
+automation_capability: []
+evidence_available: []
+test_mode:
+- SMOKE
+budget: standard
+safe_environment: false
+historical_bug_ids: []

@@ -1,0 +1,23 @@
+name: package-release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Validate
+        run: ./scripts/check-structure.sh
+      - name: Build repository archive
+        run: git archive --format=zip --output="game-bug-tester-${GITHUB_REF_NAME}.zip" HEAD
+      - uses: actions/upload-artifact@v7
+        with:
+          name: game-bug-tester-${{ github.ref_name }}
+          path: game-bug-tester-${{ github.ref_name }}.zip

@@ -1,0 +1,125 @@
+version: 3.4.0
+safe_environment: true
+name: death_reward_reconnect_stateful_fuzz
+seed: 34017
+max_examples: 160
+min_steps: 6
+max_steps: 12
+stop_after_first_failure: true
+generation:
+  novel_transition_boost: 3.0
+  novel_action_boost: 1.5
+initial_model:
+  alive: true
+  connected: true
+  scene: arena
+  menu_open: false
+  reward_claimed: false
+  reward_grants: 0
+actions:
+- id: kill
+  executor: client_a
+  name: kill_player
+  weight: 2.2
+  preconditions:
+  - path: connected
+    op: eq
+    value: true
+  - path: alive
+    op: eq
+    value: true
+  effects:
+  - path: alive
+    op: set
+    value: false
+- id: claim
+  executor: client_a
+  name: claim_death_reward
+  weight: 3.2
+  preconditions:
+  - path: connected
+    op: eq
+    value: true
+  - path: alive
+    op: eq
+    value: false
+  effects:
+  - path: reward_claimed
+    op: set
+    value: true
+  - path: reward_grants
+    op: set_if_false_then_inc
+    guard_path: reward_claimed
+    value: 1
+- id: disconnect
+  executor: server
+  name: disconnect_client
+  weight: 2.8
+  value:
+    client_id: client_a
+  preconditions:
+  - path: connected
+    op: eq
+    value: true
+  effects:
+  - path: connected
+    op: set
+    value: false
+- id: reconnect
+  executor: server
+  name: reconnect_client
+  weight: 6.0
+  value:
+    client_id: client_a
+  preconditions:
+  - path: connected
+    op: eq
+    value: false
+  effects:
+  - path: connected
+    op: set
+    value: true
+- id: scene
+  executor: client_a
+  name: change_scene
+  weight: 1.1
+  preconditions:
+  - path: connected
+    op: eq
+    value: true
+  effects:
+  - path: scene
+    op: toggle
+    values:
+    - arena
+    - town
+- id: menu
+  executor: client_a
+  name: toggle_menu
+  weight: 1.0
+  effects:
+  - path: menu_open
+    op: toggle_bool
+- id: noop
+  executor: client_b
+  name: noop
+  weight: 0.5
+  effects: []
+probe:
+  executor: server
+  name: sequence_snapshot
+invariants:
+- id: reward_grant_at_most_once
+  path: reward_grants
+  op: le
+  expected: 1
+  target_bug_ids:
+  - NET-007
+  - NET-014
+shrinking:
+  enabled: true
+  candidate_repeats: 3
+  preserve_fail_rate: 0.67
+  confirmation_repeats: 10
+  max_evaluations: 180
+  single_cleanup: true

@@ -1,0 +1,1287 @@
+version: 1.0.0
+schema:
+  required_fields:
+  - id
+  - category
+  - name
+  - applicable_features
+  - triggers
+  - oracle
+  - evidence
+  - default_severity
+bugs:
+- id: STAB-001
+  category: STAB
+  name: 启动崩溃或无法进入首个可交互状态
+  applicable_features:
+  - launch
+  triggers:
+  - first_launch
+  - update_launch
+  - offline_launch
+  oracle: 进程稳定进入首个可交互状态且无异常退出
+  evidence:
+  - video
+  - log
+  - crash_dump
+  default_severity: S0
+- id: STAB-002
+  category: STAB
+  name: 场景切换崩溃
+  applicable_features:
+  - scene_loading
+  - gameplay
+  triggers:
+  - repeat_scene_enter_exit
+  - teleport
+  - death_reload
+  oracle: 场景切换完成且可交互，进程不退出
+  evidence:
+  - video
+  - log
+  default_severity: S1
+- id: STAB-003
+  category: STAB
+  name: 长时间运行卡死或未响应
+  applicable_features:
+  - gameplay
+  triggers:
+  - long_session
+  - repeated_actions
+  oracle: 输入、画面与主线程持续有响应
+  evidence:
+  - video
+  - log
+  - profiler
+  default_severity: S1
+- id: STAB-004
+  category: STAB
+  name: 黑屏且无法恢复
+  applicable_features:
+  - scene_loading
+  - pause
+  - lifecycle
+  triggers:
+  - pause_resume
+  - background_foreground
+  - resolution_change
+  oracle: 画面在合理时间内恢复到可交互状态
+  evidence:
+  - video
+  - log
+  default_severity: S1
+- id: NAV-001
+  category: NAV
+  name: 角色卡在地图几何体中无法移动
+  applicable_features:
+  - movement
+  triggers:
+  - wall_corner
+  - narrow_gap
+  - slope
+  - stairs
+  oracle: 持续移动输入时角色应能正常移动或得到明确设计阻挡
+  evidence:
+  - video
+  - position
+  default_severity: S1
+- id: NAV-002
+  category: NAV
+  name: 角色掉出地图或进入不可恢复区域
+  applicable_features:
+  - movement
+  triggers:
+  - map_edge
+  - jump_dash
+  - moving_platform
+  - seam
+  oracle: 角色不得越出合法地图区域；越界后应有设计恢复机制
+  evidence:
+  - video
+  - position
+  default_severity: S1
+- id: NAV-003
+  category: NAV
+  name: 关键目标或出口不可达
+  applicable_features:
+  - movement
+  - quest
+  triggers:
+  - path_to_objective
+  - blocked_door
+  - nav_mesh_gap
+  oracle: 主线/关键目标存在可行路径
+  evidence:
+  - video
+  - map_position
+  default_severity: S1
+- id: NAV-004
+  category: NAV
+  name: 传送后落点非法
+  applicable_features:
+  - teleport
+  - respawn
+  triggers:
+  - teleport
+  - respawn
+  - checkpoint_load
+  oracle: 落点位于合法、安全、可操作区域
+  evidence:
+  - video
+  - position
+  default_severity: S1
+- id: PHY-001
+  category: PHY
+  name: 冲刺或高速移动穿墙
+  applicable_features:
+  - movement
+  - dash
+  triggers:
+  - dash_into_wall
+  - diagonal_corner
+  - door_closing
+  oracle: 角色碰撞体不得跨越不可穿越边界
+  evidence:
+  - video
+  - position
+  - collision_log
+  default_severity: S1
+- id: PHY-002
+  category: PHY
+  name: 穿地或从地形接缝掉落
+  applicable_features:
+  - movement
+  - jump
+  triggers:
+  - slope
+  - stairs
+  - terrain_seam
+  - landing_edge
+  oracle: 角色应保持在合法支撑面上
+  evidence:
+  - video
+  - position
+  default_severity: S1
+- id: PHY-003
+  category: PHY
+  name: 碰撞抖动或异常弹飞
+  applicable_features:
+  - movement
+  - physics
+  triggers:
+  - dynamic_object_contact
+  - narrow_space
+  - object_stack
+  oracle: 碰撞响应应稳定，不产生无设计依据的巨大位移/速度
+  evidence:
+  - video
+  - velocity
+  default_severity: S2
+- id: PHY-004
+  category: PHY
+  name: 高速投射物穿透目标
+  applicable_features:
+  - combat
+  - projectile
+  triggers:
+  - high_speed_projectile
+  - close_range_shot
+  oracle: 符合命中条件的投射物应按设计触发碰撞/伤害
+  evidence:
+  - video
+  - combat_log
+  default_severity: S2
+- id: CHAR-001
+  category: CHAR
+  name: 死亡后仍可攻击或移动
+  applicable_features:
+  - combat
+  - death
+  triggers:
+  - death_plus_attack
+  - death_plus_move
+  oracle: 死亡态仅允许设计允许的输入/行为
+  evidence:
+  - video
+  - state
+  default_severity: S1
+- id: CHAR-002
+  category: CHAR
+  name: 眩晕/控制状态可异常使用技能或冲刺
+  applicable_features:
+  - combat
+  - skill
+  - crowd_control
+  triggers:
+  - stun_plus_dash
+  - stun_plus_skill
+  oracle: 受控态行为限制与设计规则一致
+  evidence:
+  - video
+  - state
+  default_severity: S2
+- id: CHAR-003
+  category: CHAR
+  name: 动作结束后角色永久锁死
+  applicable_features:
+  - movement
+  - combat
+  - animation
+  triggers:
+  - attack_interrupt
+  - interaction_interrupt
+  - animation_cancel
+  oracle: 动作结束或取消后状态机回到可继续状态
+  evidence:
+  - video
+  - state
+  default_severity: S1
+- id: CHAR-004
+  category: CHAR
+  name: 复活后状态残留
+  applicable_features:
+  - death
+  - respawn
+  - combat
+  triggers:
+  - respawn_after_buff
+  - respawn_after_invulnerable
+  - respawn_after_stun
+  oracle: 复活后只保留设计允许的状态
+  evidence:
+  - video
+  - state
+  - stats
+  default_severity: S2
+- id: INPUT-001
+  category: INPUT
+  name: 单次输入重复触发
+  applicable_features:
+  - ui
+  - interaction
+  - shop
+  triggers:
+  - single_click
+  - low_fps_click
+  oracle: 一次输入只产生一次业务动作
+  evidence:
+  - video
+  - event_log
+  - state
+  default_severity: S2
+- id: INPUT-002
+  category: INPUT
+  name: 快速连点绕过按钮禁用或冷却
+  applicable_features:
+  - ui
+  - shop
+  - reward
+  - skill
+  triggers:
+  - rapid_tap
+  - double_click
+  - click_during_disable
+  oracle: 禁用/冷却期间不得执行受限动作
+  evidence:
+  - video
+  - state
+  default_severity: S1
+- id: INPUT-003
+  category: INPUT
+  name: 切前后台后输入持续按下或失效
+  applicable_features:
+  - lifecycle
+  - movement
+  triggers:
+  - alt_tab
+  - background_foreground
+  oracle: 恢复焦点后输入状态重置且可正常操作
+  evidence:
+  - video
+  default_severity: S2
+- id: INPUT-004
+  category: INPUT
+  name: 多控制方案切换后输入与提示不一致
+  applicable_features:
+  - controller
+  - keyboard_mouse
+  - touch
+  triggers:
+  - controller_to_keyboard
+  - keyboard_to_controller
+  oracle: 实际输入与当前控制方案/提示一致
+  evidence:
+  - video
+  - screenshot
+  default_severity: S3
+- id: UI-001
+  category: UI
+  name: 可用按钮点击无响应
+  applicable_features:
+  - ui
+  triggers:
+  - click_enabled_button
+  oracle: 按钮在可用态应产生预期动作或反馈
+  evidence:
+  - video
+  - ui_tree
+  default_severity: S2
+- id: UI-002
+  category: UI
+  name: 弹窗或遮罩导致关键按钮不可达
+  applicable_features:
+  - ui
+  triggers:
+  - popup_stack
+  - overlay
+  - resolution_change
+  oracle: 关键流程控件始终可达或存在明确关闭路径
+  evidence:
+  - screenshot
+  - video
+  default_severity: S2
+- id: UI-003
+  category: UI
+  name: UI 显示状态与真实状态不一致
+  applicable_features:
+  - ui
+  - inventory
+  - combat
+  - quest
+  triggers:
+  - state_change
+  - scene_return
+  - reconnect
+  oracle: UI 显示与权威业务状态一致
+  evidence:
+  - screenshot
+  - state
+  default_severity: S2
+- id: UI-004
+  category: UI
+  name: 返回键关闭错误层级或误退出
+  applicable_features:
+  - ui
+  - pause
+  triggers:
+  - back_button
+  - escape
+  - nested_popup
+  oracle: 返回动作遵循界面栈规则
+  evidence:
+  - video
+  default_severity: S2
+- id: UI-005
+  category: UI
+  name: 不同分辨率/安全区导致内容截断
+  applicable_features:
+  - ui
+  - settings
+  triggers:
+  - aspect_ratio_change
+  - safe_area
+  - ui_scale
+  oracle: 关键文本和控件完整可见可操作
+  evidence:
+  - screenshot
+  default_severity: S3
+- id: GAME-001
+  category: GAME
+  name: 伤害或治疗计算不一致
+  applicable_features:
+  - combat
+  triggers:
+  - normal_hit
+  - critical_hit
+  - shield
+  - heal
+  oracle: 前后数值满足项目定义的伤害/治疗公式
+  evidence:
+  - combat_log
+  - stats
+  - video
+  default_severity: S2
+- id: GAME-002
+  category: GAME
+  name: 技能冷却被状态切换绕过
+  applicable_features:
+  - skill
+  - combat
+  triggers:
+  - skill_then_menu
+  - skill_then_equip
+  - skill_then_respawn
+  oracle: 冷却状态按设计持续并恢复
+  evidence:
+  - video
+  - state
+  default_severity: S1
+- id: GAME-003
+  category: GAME
+  name: 道具重复获取或错误消耗
+  applicable_features:
+  - inventory
+  - pickup
+  triggers:
+  - pickup_plus_scene_change
+  - pickup_inventory_full
+  - rapid_pickup
+  oracle: 库存变化与实际获得/消耗次数一致
+  evidence:
+  - inventory_state
+  - video
+  default_severity: S1
+- id: GAME-004
+  category: GAME
+  name: 任务无法完成或重复领奖
+  applicable_features:
+  - quest
+  - reward
+  triggers:
+  - complete_then_scene_change
+  - rapid_claim
+  - reconnect_claim
+  oracle: 任务状态转换唯一且奖励只结算一次
+  evidence:
+  - quest_state
+  - inventory_state
+  - video
+  default_severity: S1
+- id: GAME-005
+  category: GAME
+  name: 购买失败仍扣款或成功未扣款
+  applicable_features:
+  - shop
+  - economy
+  triggers:
+  - insufficient_currency
+  - exact_currency
+  - network_retry
+  oracle: 货币与商品库存满足交易原子性
+  evidence:
+  - currency_state
+  - inventory_state
+  - video
+  default_severity: S1
+- id: GAME-006
+  category: GAME
+  name: 条件边界判断错误
+  applicable_features:
+  - quest
+  - skill
+  - shop
+  - progression
+  triggers:
+  - threshold_minus_one
+  - threshold_equal
+  - threshold_plus_one
+  oracle: N-1/N/N+1 条件结果与设计阈值一致
+  evidence:
+  - state
+  - screenshot
+  default_severity: S2
+- id: SAVE-001
+  category: SAVE
+  name: 保存后关键字段丢失
+  applicable_features:
+  - save_load
+  triggers:
+  - save_restart_load
+  oracle: 所有设计上应持久化字段与保存快照一致
+  evidence:
+  - before_after_state
+  - video
+  - save_log
+  default_severity: S0
+- id: SAVE-002
+  category: SAVE
+  name: 保存成功提示后实际回档
+  applicable_features:
+  - save_load
+  triggers:
+  - save_then_exit
+  - autosave_then_force_close_safe_test
+  oracle: 再次加载进入最近一次成功存档状态
+  evidence:
+  - before_after_state
+  - save_log
+  default_severity: S0
+- id: SAVE-003
+  category: SAVE
+  name: 合法操作产生坏档或无法读取
+  applicable_features:
+  - save_load
+  triggers:
+  - repeat_save
+  - scene_change_save
+  - death_save
+  oracle: 合法保存序列生成的存档可被正常读取
+  evidence:
+  - save_log
+  - video
+  default_severity: S0
+- id: SAVE-004
+  category: SAVE
+  name: 保存与场景切换竞态造成部分字段不一致
+  applicable_features:
+  - save_load
+  - scene_loading
+  triggers:
+  - save_plus_teleport
+  - save_plus_death
+  - save_plus_exit
+  oracle: 持久化快照具备一致事务边界，不出现混合新旧状态
+  evidence:
+  - before_after_state
+  - save_log
+  default_severity: S1
+- id: SAVE-005
+  category: SAVE
+  name: 设置项未持久化
+  applicable_features:
+  - settings
+  - save_load
+  triggers:
+  - change_settings_restart
+  oracle: 设计为持久化的设置在重启后保持
+  evidence:
+  - screenshot
+  - config_state
+  default_severity: S3
+- id: NET-001
+  category: NET
+  name: 多客户端关键状态不同步
+  applicable_features:
+  - multiplayer
+  - network
+  triggers:
+  - simultaneous_action
+  - movement
+  - combat
+  oracle: 同步窗口后各客户端收敛至权威状态
+  evidence:
+  - multi_client_video
+  - server_log
+  - state
+  default_severity: S1
+- id: NET-002
+  category: NET
+  name: 超时/重试造成重复交易或奖励
+  applicable_features:
+  - network
+  - shop
+  - reward
+  triggers:
+  - timeout_retry
+  - reconnect_during_submit
+  oracle: 具有幂等要求的业务动作只结算一次
+  evidence:
+  - server_log
+  - account_state
+  - video
+  default_severity: S0
+- id: NET-003
+  category: NET
+  name: 临时断线后客户端永久卡在连接状态
+  applicable_features:
+  - network
+  triggers:
+  - disconnect_reconnect
+  oracle: 在设计超时内重连成功或明确失败并可恢复
+  evidence:
+  - video
+  - network_log
+  default_severity: S1
+- id: NET-004
+  category: NET
+  name: 重连后玩家状态丢失或错误
+  applicable_features:
+  - network
+  - multiplayer
+  triggers:
+  - disconnect_during_combat
+  - reconnect_after_scene_change
+  oracle: 重连后关键状态与服务端权威状态一致
+  evidence:
+  - server_state
+  - client_state
+  - video
+  default_severity: S1
+- id: NET-005
+  category: NET
+  name: 房主退出导致房间卡死或错误结算
+  applicable_features:
+  - multiplayer
+  - host_client
+  triggers:
+  - host_leave
+  oracle: 按设计执行房主迁移、结束或安全返回，不永久卡死
+  evidence:
+  - multi_client_video
+  - network_log
+  default_severity: S1
+- id: NET-006
+  category: NET
+  name: 匹配取消与成功并发导致异常状态
+  applicable_features:
+  - matchmaking
+  triggers:
+  - cancel_at_match_found
+  oracle: 最终仅存在一个合法匹配状态
+  evidence:
+  - video
+  - network_log
+  default_severity: S1
+- id: PERF-001
+  category: PERF
+  name: 特定场景出现持续性能回归
+  applicable_features:
+  - gameplay
+  - performance
+  triggers:
+  - heavy_scene
+  - battle
+  - crowd
+  oracle: 同设备/场景下不低于项目性能预算或历史基线
+  evidence:
+  - profiler
+  - frame_time
+  - video
+  default_severity: S2
+- id: PERF-002
+  category: PERF
+  name: 重复操作导致内存持续增长
+  applicable_features:
+  - scene_loading
+  - ui
+  - gameplay
+  triggers:
+  - repeat_open_close
+  - repeat_scene_load
+  oracle: 经过稳定窗口后内存不持续无界增长
+  evidence:
+  - memory_trace
+  - profiler
+  default_severity: S2
+- id: PERF-003
+  category: PERF
+  name: 场景加载时间异常增长
+  applicable_features:
+  - scene_loading
+  triggers:
+  - repeat_scene_load
+  - long_session
+  oracle: 加载耗时不显著劣于同环境基线
+  evidence:
+  - timing_log
+  - video
+  default_severity: S2
+- id: PERF-004
+  category: PERF
+  name: 大列表/大量对象操作导致明显卡顿
+  applicable_features:
+  - inventory
+  - ui
+  - crowd
+  triggers:
+  - large_list
+  - many_objects
+  oracle: 交互帧时间/响应满足项目预算
+  evidence:
+  - profiler
+  - video
+  default_severity: S2
+- id: VIS-001
+  category: VIS
+  name: 模型、材质或纹理缺失
+  applicable_features:
+  - graphics
+  triggers:
+  - scene_load
+  - equipment_change
+  - lod_change
+  oracle: 资源按设计正确加载并显示
+  evidence:
+  - screenshot
+  - render_log
+  default_severity: S3
+- id: VIS-002
+  category: VIS
+  name: 动画冻结/T-pose/状态不匹配
+  applicable_features:
+  - animation
+  - character
+  triggers:
+  - animation_interrupt
+  - equip_change
+  - respawn
+  oracle: 动画状态与角色逻辑状态一致并能正常转换
+  evidence:
+  - video
+  - animator_state
+  default_severity: S2
+- id: VIS-003
+  category: VIS
+  name: 摄像机穿墙或严重裁剪
+  applicable_features:
+  - camera
+  - movement
+  triggers:
+  - back_against_wall
+  - narrow_room
+  - camera_rotate
+  oracle: 相机遵循项目碰撞/裁剪规则，不暴露地图外内容
+  evidence:
+  - video
+  default_severity: S3
+- id: VIS-004
+  category: VIS
+  name: 特效残留或重复叠加
+  applicable_features:
+  - vfx
+  - combat
+  triggers:
+  - repeat_skill
+  - scene_change_during_vfx
+  - death_during_vfx
+  oracle: 特效生命周期结束后被清理且单事件不重复异常叠加
+  evidence:
+  - video
+  default_severity: S3
+- id: AUDIO-001
+  category: AUDIO
+  name: 应播放的关键音效缺失
+  applicable_features:
+  - audio
+  triggers:
+  - event_trigger
+  - scene_load
+  oracle: 对应事件按设计触发音频
+  evidence:
+  - video
+  - audio_event_log
+  default_severity: S3
+- id: AUDIO-002
+  category: AUDIO
+  name: 音乐/音效重复叠加
+  applicable_features:
+  - audio
+  - scene_loading
+  triggers:
+  - repeat_scene_enter
+  - pause_resume
+  oracle: 单一音频事件实例数符合设计，旧场景音轨按规则停止
+  evidence:
+  - video
+  - audio_event_log
+  default_severity: S3
+- id: AUDIO-003
+  category: AUDIO
+  name: 音量设置未生效或重启丢失
+  applicable_features:
+  - audio
+  - settings
+  triggers:
+  - volume_change
+  - restart
+  oracle: 音量实时生效且按设计持久化
+  evidence:
+  - video
+  - settings_state
+  default_severity: S3
+- id: PHY-005
+  category: PHY
+  name: 投射物错误穿过不可穿透遮挡并命中目标
+  applicable_features:
+  - combat
+  - projectile
+  triggers:
+  - wall_between_shooter_target
+  - high_speed_projectile
+  oracle: 当项目明确禁止穿透时，实心遮挡后的目标不得收到该投射物伤害
+  evidence:
+  - video
+  - projectile_telemetry
+  - target_hp
+  - collision_log
+  default_severity: S1
+- id: AI-001
+  category: AI
+  name: 可达目标存在完整路径但敌人永久卡死或不追击
+  applicable_features:
+  - ai
+  - navigation
+  - combat
+  triggers:
+  - reachable_target
+  - chase
+  - corner
+  - narrow_passage
+  oracle: 项目要求追击且路径可达时，AI 应在规定窗口内持续取得进展并进入 stopping distance
+  evidence:
+  - ai_telemetry
+  - position
+  - path_status
+  - video
+  default_severity: S1
+- id: AI-002
+  category: AI
+  name: 敌人在攻击距离外提前攻击
+  applicable_features:
+  - ai
+  - combat
+  triggers:
+  - attack_range_boundary
+  - chase_to_attack
+  oracle: 目标距离大于项目 attack range 时不得产生有效攻击事件
+  evidence:
+  - ai_telemetry
+  - attack_count
+  - distance
+  default_severity: S2
+- id: AI-003
+  category: AI
+  name: 敌人在合法攻击距离内长期不攻击
+  applicable_features:
+  - ai
+  - combat
+  triggers:
+  - inside_attack_range
+  - valid_target
+  oracle: 满足项目攻击前置条件且目标位于 attack range 内时，应在规定攻击窗口内产生攻击
+  evidence:
+  - ai_telemetry
+  - attack_count
+  - state
+  - distance
+  default_severity: S2
+- id: AI-004
+  category: AI
+  name: 丢失目标后敌人永久保持错误仇恨/追击状态
+  applicable_features:
+  - ai
+  - combat
+  - line_of_sight
+  triggers:
+  - target_hidden
+  - target_out_of_detection
+  - los_lost
+  oracle: 超过项目 target-loss timeout 后，AI 应进入项目声明的 search/idle/disengage 等恢复状态
+  evidence:
+  - ai_telemetry
+  - state
+  - timer
+  - video
+  default_severity: S2
+- id: AI-005
+  category: AI
+  name: 导航路径变化后敌人不重寻路或错误认为路径完成
+  applicable_features:
+  - ai
+  - navigation
+  triggers:
+  - dynamic_obstacle
+  - door_close
+  - path_invalidated
+  oracle: 路径失效/环境变化后的处理必须符合项目重寻路契约，不得永久卡死或错误进入到达态
+  evidence:
+  - ai_telemetry
+  - path_status
+  - remaining_distance
+  - video
+  default_severity: S2
+- id: PHY-006
+  category: PHY
+  name: 重力弹道落点或飞行时间偏离项目声明模型
+  applicable_features:
+  - projectile
+  - combat
+  - physics
+  triggers:
+  - gravity_projectile
+  - long_range
+  - arc_shot
+  oracle: 仅当项目声明标准弹道参数/轨迹真值时，实际 impact point / flight time 应落在允许误差内
+  evidence:
+  - projectile_telemetry
+  - impact_point
+  - flight_time
+  - video
+  default_severity: S2
+- id: PHY-007
+  category: PHY
+  name: 投射物穿透层数超过项目允许上限
+  applicable_features:
+  - projectile
+  - combat
+  - physics
+  triggers:
+  - multiple_walls
+  - penetration
+  - thin_obstacles
+  oracle: 当遮挡层数大于 max_penetration_layers 时，目标不得收到该投射物伤害；允许层数内则按项目契约执行
+  evidence:
+  - projectile_telemetry
+  - penetration_count
+  - target_hp
+  - hit_order
+  default_severity: S1
+- id: PHY-008
+  category: PHY
+  name: 投射物命中点明显偏离目标表面或项目参考点
+  applicable_features:
+  - projectile
+  - combat
+  - physics
+  triggers:
+  - edge_hit
+  - small_target
+  - moving_target
+  oracle: 当项目提供预期 impact reference 时，实际 impact point 与参考点距离应在 tolerance 内
+  evidence:
+  - impact_point
+  - expected_point
+  - collider
+  - video
+  default_severity: S2
+- id: AI-006
+  category: AI
+  name: 动态障碍改变路径后 AI 未按契约重寻路
+  applicable_features:
+  - ai
+  - navigation
+  triggers:
+  - dynamic_obstacle
+  - door_close
+  - navmesh_carving
+  - path_change
+  oracle: 动态障碍生效后，若项目要求重寻路且仍存在可行路径，应在 replan window 内出现重规划/替代路径并继续取得进展
+  evidence:
+  - ai_telemetry
+  - replan_count
+  - path_status
+  - position
+  - video
+  default_severity: S1
+- id: AI-007
+  category: AI
+  name: 多 Agent 在可达目标前形成永久拥堵或无进展
+  applicable_features:
+  - ai
+  - navigation
+  - crowd
+  triggers:
+  - many_agents
+  - narrow_passage
+  - same_destination
+  oracle: 在项目声明的 crowd timeout 内，到达比例/整体进展应达到最低阈值，不得形成永久死锁
+  evidence:
+  - crowd_telemetry
+  - arrived_count
+  - agent_positions
+  - video
+  default_severity: S1
+- id: AI-008
+  category: AI
+  name: Crowd 持续严重重叠并违反项目最小分离约束
+  applicable_features:
+  - ai
+  - navigation
+  - crowd
+  triggers:
+  - dense_spawn
+  - same_destination
+  - local_avoidance
+  oracle: 仅当项目声明 min_separation 时，运行期观测的最小分离距离不得持续低于允许阈值
+  evidence:
+  - crowd_telemetry
+  - min_separation
+  - positions
+  - video
+  default_severity: S2
+- id: GAME-007
+  category: GAME
+  name: AOE 半径边界伤害判定错误
+  applicable_features:
+  - combat
+  - aoe
+  - projectile
+  triggers:
+  - explosion
+  - radius_boundary
+  - area_damage
+  oracle: 目标位于项目声明 AOE 半径内/外时，真实伤害结果应分别符合 inside/outside 契约
+  evidence:
+  - target_hp
+  - damage_event
+  - distance
+  - screenshot
+  default_severity: S2
+- id: SAVE-006
+  category: SAVE
+  name: 存档损坏后未按项目契约恢复、拒绝或回退
+  applicable_features:
+  - save_load
+  - recovery
+  triggers:
+  - corrupt_primary_save
+  - truncated_save
+  - checksum_failure
+  oracle: 当存档损坏可被检测时，加载行为必须符合项目 recovery contract：例如回退到有效备份、干净拒绝或进入显式恢复流程，不得静默加载混合/损坏状态
+  evidence:
+  - save_telemetry
+  - disk_snapshot
+  - runtime_snapshot
+  - log
+  default_severity: S0
+- id: SAVE-007
+  category: SAVE
+  name: 旧版本存档迁移后关键字段丢失、错映射或版本号异常
+  applicable_features:
+  - save_load
+  - migration
+  - update
+  triggers:
+  - load_old_schema
+  - version_upgrade
+  - save_migration
+  oracle: 给定项目声明的 legacy fixture 与 migration contract，迁移后的关键字段和值、schema version 必须符合目标版本规则
+  evidence:
+  - legacy_snapshot
+  - migrated_snapshot
+  - schema_version
+  - migration_log
+  default_severity: S0
+- id: SAVE-008
+  category: SAVE
+  name: 仅会话态数据错误跨进程/新会话持久化
+  applicable_features:
+  - save_load
+  - session_state
+  triggers:
+  - restart_session
+  - new_game_session
+  - temporary_buff_or_combo
+  oracle: 项目声明为 session-only / transient 的字段在新会话启动后必须回到其默认或初始化状态，不得从持久化快照泄漏回来
+  evidence:
+  - before_after_state
+  - runtime_snapshot
+  - save_snapshot
+  default_severity: S2
+- id: NET-007
+  category: NET
+  name: 结算/领奖与断线重连竞态造成奖励重复或丢失
+  applicable_features:
+  - network
+  - reward
+  - match_end
+  triggers:
+  - match_end_disconnect
+  - reconnect_during_reward
+  - retry_after_timeout
+  oracle: 同一结算/奖励业务键在服务端权威账本中只能完成一次，重连后客户端最终与权威结果一致
+  evidence:
+  - server_ledger
+  - request_id
+  - client_state
+  - network_log
+  default_severity: S0
+- id: NET-008
+  category: NET
+  name: 多人同时拾取或交互导致同一对象被重复拥有/重复结算
+  applicable_features:
+  - multiplayer
+  - pickup
+  - interaction
+  triggers:
+  - simultaneous_pickup
+  - simultaneous_interact
+  oracle: 唯一资源/对象在服务端权威状态中最多只能成功归属一次，失败客户端应得到一致结果
+  evidence:
+  - server_state
+  - claim_count
+  - owners
+  - multi_client_video
+  default_severity: S1
+- id: NET-009
+  category: NET
+  name: 延迟/抖动/丢包后客户端状态长期无法收敛
+  applicable_features:
+  - network
+  - multiplayer
+  - replication
+  triggers:
+  - latency
+  - jitter
+  - packet_loss
+  - lag_spike
+  oracle: 在项目声明的 convergence window 内，连接存活的客户端关键字段最终与权威状态收敛
+  evidence:
+  - server_snapshot
+  - client_snapshots
+  - network_profile
+  - timestamps
+  default_severity: S1
+- id: NET-010
+  category: NET
+  name: 服务端超时或错误响应后客户端永久卡住或不可恢复
+  applicable_features:
+  - network
+  - online_service
+  triggers:
+  - timeout
+  - server_error
+  - request_failure
+  oracle: 在项目声明超时后客户端必须进入可恢复的失败/重试/返回状态，不得无限等待、输入锁死或崩溃
+  evidence:
+  - client_state
+  - ui_state
+  - network_log
+  - video
+  default_severity: S1
+- id: NET-011
+  category: NET
+  name: 断线重连后生成重复玩家实体或幽灵角色
+  applicable_features:
+  - multiplayer
+  - reconnect
+  - spawn
+  triggers:
+  - disconnect_reconnect
+  - session_resume
+  oracle: 重连完成后同一玩家的权威玩家实体数量符合项目契约，通常为 1，不得残留重复 avatar/ownership
+  evidence:
+  - server_entities
+  - player_id
+  - ownership
+  - client_video
+  default_severity: S1
+- id: NET-012
+  category: NET
+  name: 重连后重放断线前陈旧输入/技能导致异常移动或重复动作
+  applicable_features:
+  - multiplayer
+  - input
+  - reconnect
+  triggers:
+  - disconnect_while_input
+  - reconnect_with_queued_commands
+  oracle: 重连后仅接受项目允许的新鲜输入/命令；断线前已过期的输入不得被重复应用
+  evidence:
+  - input_sequence
+  - server_command_log
+  - player_state
+  - timestamps
+  default_severity: S1
+- id: NET-013
+  category: NET
+  name: 房主迁移后权威状态丢失、重置或出现双主
+  applicable_features:
+  - multiplayer
+  - host_client
+  - host_migration
+  triggers:
+  - host_leave
+  - host_crash
+  - migration
+  oracle: 若项目支持房主迁移，迁移后必须只有一个合法新主机且关键权威状态按契约连续；若不支持迁移则必须安全结束/返回
+  evidence:
+  - host_id
+  - server_snapshot
+  - session_state
+  - multi_client_log
+  default_severity: S0
+- id: NET-014
+  category: NET
+  name: 重复包/乱序消息导致非幂等命令重复或错误顺序执行
+  applicable_features:
+  - network
+  - replication
+  - commands
+  triggers:
+  - packet_duplicate
+  - packet_reorder
+  - retry
+  oracle: 对项目声明为幂等或带序列号的命令，重复/乱序传输不得造成重复结算或违反服务器顺序规则
+  evidence:
+  - sequence_id
+  - server_command_log
+  - authoritative_state
+  - network_profile
+  default_severity: S1
+- id: NET-015
+  category: NET
+  name: 多人场景切换不同步导致客户端滞留旧场景或进入错误战局
+  applicable_features:
+  - network
+  - scene_loading
+  - multiplayer
+  triggers:
+  - server_scene_change
+  - late_join
+  - reconnect_during_scene
+  oracle: 在项目声明的场景同步窗口内，所有应在线客户端都进入同一权威场景/关卡实例
+  evidence:
+  - server_scene
+  - client_scenes
+  - session_id
+  - timestamps
+  default_severity: S1
+- id: NET-016
+  category: NET
+  name: 交易/购买与断线竞态造成部分提交或账物不一致
+  applicable_features:
+  - network
+  - shop
+  - transaction
+  - disconnect
+  triggers:
+  - purchase_disconnect_race
+  - timeout_during_commit
+  - disconnect_during_transaction
+  oracle: 项目声明原子交易时，竞态终态只能属于允许的完整状态集合（例如完整提交或完全未提交），不得出现扣款与物品/账本分裂。
+  evidence:
+  - server_ledger
+  - account_state
+  - request_id
+  - branch_timing
+  - multi_client_log
+  default_severity: S0
+- id: NET-017
+  category: NET
+  name: 同一玩家并发技能/动作请求绕过冷却或一次性执行保护
+  applicable_features:
+  - network
+  - combat
+  - skill
+  - cooldown
+  triggers:
+  - simultaneous_skill_request
+  - double_click
+  - duplicate_command_race
+  oracle: 项目声明单次/冷却保护时，同一逻辑动作在同一保护窗口内的权威成功次数不得超过允许值。
+  evidence:
+  - cast_count
+  - cooldown_state
+  - server_command_log
+  - branch_timing
+  default_severity: S1
+- id: NET-018
+  category: NET
+  name: Host Migration 与权威状态写入竞态导致丢更新/回滚/双主
+  applicable_features:
+  - network
+  - host_migration
+  - authoritative_state
+  triggers:
+  - host_leave_during_mutation
+  - migration_during_commit
+  - host_crash_race
+  oracle: 若项目支持迁移，迁移与并发权威写入完成后必须满足单一合法 host 与项目声明的状态连续性/ exactly-once 不变量。
+  evidence:
+  - host_id
+  - authoritative_state
+  - mutation_log
+  - branch_timing
+  - session_log
+  default_severity: S0

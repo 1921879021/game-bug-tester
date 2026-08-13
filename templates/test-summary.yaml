@@ -1,0 +1,20 @@
+build: "unknown"
+platform: "unknown"
+scope: []
+modes: []
+summary:
+  total: 0
+  passed: 0
+  failed: 0
+  blocked: 0
+bugs:
+  blocker: 0
+  critical: 0
+  major: 0
+  minor: 0
+  cosmetic: 0
+top_risks: []
+confirmed_bugs: []
+suspected_bugs: []
+not_reproduced: []
+regression_recommendations: []

@@ -1,0 +1,606 @@
+version: 1.1.0
+profiles:
+  generic:
+    aliases:
+    - other
+    - unknown
+    core_features:
+    - launch
+    - main_menu
+    - gameplay
+    - ui
+    risk_categories:
+      STAB: 5
+      INPUT: 3
+      UI: 3
+      PERF: 2
+    priority_bug_ids:
+    - STAB-001
+    - STAB-002
+    - UI-001
+    - INPUT-001
+    smoke_route:
+    - launch
+    - main_menu
+    - enter_gameplay
+    - basic_input
+    - pause_resume
+    - exit_or_return
+    state_combo_tags:
+    - lifecycle
+    - input
+    - scene
+    recommended_oracles:
+    - process_alive
+    - ui_reachability
+    - state_transition
+  rpg_arpg:
+    aliases:
+    - RPG
+    - ARPG
+    - JRPG
+    - action_rpg
+    core_features:
+    - movement
+    - combat
+    - skill
+    - inventory
+    - equipment
+    - quest
+    - shop
+    - save_load
+    - scene_loading
+    - death
+    - respawn
+    risk_categories:
+      SAVE: 5
+      GAME: 5
+      CHAR: 4
+      STAB: 4
+      NAV: 3
+      PHY: 3
+      UI: 3
+      INPUT: 3
+      AI: 4
+    priority_bug_ids:
+    - SAVE-001
+    - SAVE-002
+    - SAVE-004
+    - GAME-002
+    - GAME-003
+    - GAME-004
+    - GAME-005
+    - CHAR-001
+    - CHAR-003
+    - NAV-002
+    - PHY-001
+    - AI-001
+    - AI-002
+    - AI-003
+    smoke_route:
+    - launch
+    - load_or_new_game
+    - movement
+    - basic_combat
+    - open_inventory
+    - quest_state
+    - save
+    - reload
+    - exit
+    state_combo_tags:
+    - combat_state
+    - inventory
+    - quest
+    - save
+    - scene
+    - death_respawn
+    recommended_oracles:
+    - state_transition
+    - delta_invariant
+    - persistence_snapshot
+    - position_bounds
+  fps_tps:
+    aliases:
+    - FPS
+    - TPS
+    - shooter
+    - battle_royale
+    core_features:
+    - movement
+    - jump
+    - dash
+    - camera
+    - combat
+    - projectile
+    - weapon
+    - reload
+    - death
+    - respawn
+    - ui
+    risk_categories:
+      PHY: 5
+      NAV: 5
+      CHAR: 4
+      INPUT: 4
+      GAME: 4
+      VIS: 3
+      PERF: 3
+      NET: 3
+      AI: 4
+    priority_bug_ids:
+    - PHY-001
+    - PHY-002
+    - PHY-004
+    - NAV-001
+    - NAV-002
+    - CHAR-001
+    - CHAR-003
+    - INPUT-002
+    - VIS-003
+    - PERF-001
+    - AI-001
+    - AI-002
+    - AI-003
+    smoke_route:
+    - launch
+    - enter_match_or_level
+    - movement
+    - aim
+    - fire
+    - reload
+    - weapon_switch
+    - death_respawn
+    - pause
+    - exit
+    state_combo_tags:
+    - movement_edge
+    - weapon
+    - combat_state
+    - death_respawn
+    - camera
+    - network_if_online
+    recommended_oracles:
+    - position_bounds
+    - state_transition
+    - delta_invariant
+    - client_server_convergence
+  moba:
+    aliases:
+    - MOBA
+    core_features:
+    - matchmaking
+    - multiplayer
+    - network
+    - movement
+    - combat
+    - skill
+    - crowd_control
+    - shop
+    - economy
+    - death
+    - respawn
+    - reward
+    risk_categories:
+      NET: 5
+      GAME: 5
+      CHAR: 5
+      STAB: 4
+      INPUT: 3
+      UI: 3
+      PERF: 3
+      AI: 4
+    priority_bug_ids:
+    - NET-001
+    - NET-002
+    - NET-003
+    - NET-004
+    - NET-006
+    - GAME-002
+    - GAME-005
+    - CHAR-001
+    - CHAR-002
+    - CHAR-004
+    - AI-001
+    - AI-002
+    - AI-003
+    smoke_route:
+    - launch
+    - login
+    - matchmaking
+    - enter_match
+    - move
+    - cast_skill
+    - shop
+    - death_respawn
+    - match_end
+    - return_lobby
+    state_combo_tags:
+    - network
+    - combat_state
+    - shop_economy
+    - death_respawn
+    - match_end
+    recommended_oracles:
+    - client_server_convergence
+    - idempotency
+    - state_transition
+    - delta_invariant
+  racing:
+    aliases:
+    - Racing
+    - kart
+    - driving
+    core_features:
+    - vehicle
+    - movement
+    - physics
+    - track
+    - checkpoint
+    - timer
+    - ranking
+    - controller
+    - respawn
+    - camera
+    risk_categories:
+      PHY: 5
+      NAV: 4
+      INPUT: 4
+      GAME: 4
+      PERF: 3
+      VIS: 3
+    priority_bug_ids:
+    - PHY-003
+    - NAV-002
+    - NAV-004
+    - INPUT-004
+    - PERF-001
+    - VIS-003
+    smoke_route:
+    - launch
+    - select_vehicle
+    - start_race
+    - steer_accelerate_brake
+    - checkpoint
+    - off_track_reset
+    - finish
+    - ranking
+    - exit
+    state_combo_tags:
+    - vehicle
+    - checkpoint
+    - movement_edge
+    - controller
+    - timer
+    recommended_oracles:
+    - position_bounds
+    - monotonic_progress
+    - state_transition
+    - performance_baseline
+  slg_4x:
+    aliases:
+    - SLG
+    - 4X
+    - strategy
+    core_features:
+    - economy
+    - resource
+    - building
+    - queue
+    - timer
+    - reward
+    - shop
+    - save_load
+    - network
+    - ui
+    risk_categories:
+      GAME: 5
+      NET: 5
+      SAVE: 4
+      UI: 4
+      INPUT: 3
+      PERF: 3
+    priority_bug_ids:
+    - GAME-005
+    - GAME-006
+    - NET-002
+    - SAVE-001
+    - SAVE-002
+    - UI-003
+    - INPUT-002
+    - PERF-004
+    smoke_route:
+    - launch
+    - load_city_or_map
+    - collect_resource
+    - start_build_or_queue
+    - open_shop
+    - claim_reward
+    - save_or_sync
+    - return
+    state_combo_tags:
+    - economy
+    - timer
+    - reward
+    - network
+    - save
+    - large_ui
+    recommended_oracles:
+    - delta_invariant
+    - idempotency
+    - persistence_snapshot
+    - time_monotonicity
+  simulation_management:
+    aliases:
+    - Simulation
+    - Management
+    - tycoon
+    - sim
+    core_features:
+    - economy
+    - resource
+    - simulation
+    - time_scale
+    - save_load
+    - ui
+    - large_list
+    - scene_loading
+    risk_categories:
+      SAVE: 5
+      GAME: 5
+      PERF: 4
+      UI: 4
+      STAB: 3
+      AI: 2
+    priority_bug_ids:
+    - SAVE-001
+    - SAVE-004
+    - PERF-002
+    - PERF-004
+    - GAME-006
+    - UI-003
+    - AI-001
+    - AI-002
+    - AI-003
+    smoke_route:
+    - launch
+    - load_simulation
+    - change_time_scale
+    - perform_core_action
+    - open_management_ui
+    - save
+    - reload
+    - continue
+    state_combo_tags:
+    - simulation_time
+    - economy
+    - save
+    - large_ui
+    - long_session
+    recommended_oracles:
+    - delta_invariant
+    - time_monotonicity
+    - persistence_snapshot
+    - memory_growth
+  platformer_action:
+    aliases:
+    - Platformer
+    - Action
+    - metroidvania
+    core_features:
+    - movement
+    - jump
+    - dash
+    - moving_platform
+    - combat
+    - camera
+    - death
+    - respawn
+    - checkpoint
+    risk_categories:
+      NAV: 5
+      PHY: 5
+      CHAR: 4
+      INPUT: 3
+      VIS: 3
+      STAB: 3
+    priority_bug_ids:
+    - NAV-001
+    - NAV-002
+    - NAV-004
+    - PHY-001
+    - PHY-002
+    - CHAR-003
+    - VIS-003
+    smoke_route:
+    - launch
+    - enter_level
+    - move_jump
+    - platform_edge
+    - basic_combat
+    - checkpoint
+    - death_respawn
+    - exit
+    state_combo_tags:
+    - movement_edge
+    - platform
+    - combat_state
+    - death_respawn
+    - checkpoint
+    recommended_oracles:
+    - position_bounds
+    - state_transition
+    - checkpoint_persistence
+  casual_puzzle:
+    aliases:
+    - Casual
+    - Puzzle
+    - match3
+    - idle
+    core_features:
+    - level
+    - ui
+    - input
+    - reward
+    - lifecycle
+    - settings
+    - save_load
+    risk_categories:
+      UI: 5
+      INPUT: 5
+      GAME: 4
+      SAVE: 3
+      STAB: 3
+    priority_bug_ids:
+    - INPUT-001
+    - INPUT-002
+    - UI-001
+    - UI-002
+    - UI-005
+    - GAME-004
+    - SAVE-005
+    - STAB-004
+    smoke_route:
+    - launch
+    - start_level
+    - core_gesture_or_click
+    - win_or_fail
+    - reward
+    - restart_level
+    - background_foreground
+    - exit
+    state_combo_tags:
+    - input
+    - reward
+    - lifecycle
+    - level_state
+    - ui_stack
+    recommended_oracles:
+    - ui_reachability
+    - idempotency
+    - state_transition
+    - persistence_snapshot
+  survival_crafting:
+    aliases:
+    - Survival
+    - Crafting
+    - sandbox
+    core_features:
+    - movement
+    - combat
+    - inventory
+    - pickup
+    - crafting
+    - building
+    - save_load
+    - death
+    - respawn
+    - multiplayer
+    risk_categories:
+      GAME: 5
+      SAVE: 5
+      PHY: 4
+      NAV: 4
+      NET: 4
+      CHAR: 3
+      AI: 4
+    priority_bug_ids:
+    - GAME-003
+    - SAVE-001
+    - SAVE-004
+    - NET-001
+    - NET-002
+    - PHY-001
+    - NAV-002
+    - CHAR-004
+    - AI-001
+    - AI-002
+    - AI-003
+    smoke_route:
+    - launch
+    - load_world
+    - move
+    - pickup
+    - craft
+    - place_building
+    - combat
+    - save
+    - reload
+    state_combo_tags:
+    - inventory
+    - crafting
+    - building
+    - save
+    - death_respawn
+    - network_if_online
+    recommended_oracles:
+    - delta_invariant
+    - persistence_snapshot
+    - position_bounds
+    - client_server_convergence
+  mmo_online_rpg:
+    aliases:
+    - MMO
+    - MMORPG
+    - online_rpg
+    core_features:
+    - login
+    - network
+    - multiplayer
+    - movement
+    - combat
+    - inventory
+    - quest
+    - shop
+    - economy
+    - reward
+    - save_load
+    - scene_loading
+    - matchmaking
+    risk_categories:
+      NET: 5
+      SAVE: 5
+      GAME: 5
+      STAB: 4
+      CHAR: 3
+      PERF: 3
+      UI: 3
+      AI: 4
+    priority_bug_ids:
+    - NET-001
+    - NET-002
+    - NET-003
+    - NET-004
+    - SAVE-001
+    - SAVE-002
+    - GAME-003
+    - GAME-004
+    - GAME-005
+    - STAB-002
+    - AI-001
+    - AI-002
+    - AI-003
+    smoke_route:
+    - launch
+    - login
+    - enter_world
+    - move
+    - combat
+    - inventory
+    - quest
+    - shop
+    - scene_or_instance_change
+    - disconnect_reconnect
+    - logout
+    state_combo_tags:
+    - network
+    - economy
+    - reward
+    - save
+    - scene
+    - multiplayer
+    - death_respawn
+    recommended_oracles:
+    - client_server_convergence
+    - idempotency
+    - persistence_snapshot
+    - state_transition

@@ -1,0 +1,45 @@
+name: Skill behavior bug
+description: Report incorrect, unsafe, misleading, or broken behavior in Game Bug Tester.
+title: "[Skill bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please describe a problem with the skill itself, not a bug in your game.
+  - type: input
+    id: agent
+    attributes:
+      label: Coding agent / host
+      placeholder: Codex, Claude Code, other
+    validations:
+      required: true
+  - type: input
+    id: engine
+    attributes:
+      label: Game engine / project type
+      placeholder: Unity 6, Unreal 5.x, Godot 4.x, custom
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected skill behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual skill behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Minimal evidence or reproduction
+      description: Remove secrets, credentials, private source code, and production data.
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed secrets and sensitive production data.
+          required: true

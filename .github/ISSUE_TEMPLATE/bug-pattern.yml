@@ -1,0 +1,53 @@
+name: New bug pattern
+description: Propose a reusable game bug pattern for the core catalog.
+title: "[Bug pattern]: "
+labels: ["bug-pattern"]
+body:
+  - type: input
+    id: category
+    attributes:
+      label: Category
+      placeholder: save/load, physics, UI, AI, network, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: prereq
+    attributes:
+      label: Prerequisites
+    validations:
+      required: true
+  - type: textarea
+    id: trigger
+    attributes:
+      label: Trigger / test action
+    validations:
+      required: true
+  - type: textarea
+    id: oracle
+    attributes:
+      label: Expected invariant / oracle
+      description: Explain how the agent can distinguish the defect from intended behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Required evidence
+      placeholder: state snapshot, log/event, component state, screenshot, etc.
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Suggested default severity
+      options:
+        - Critical
+        - High
+        - Medium
+        - Low
+    validations:
+      required: true
+  - type: textarea
+    id: falsepositive
+    attributes:
+      label: Known false-positive conditions

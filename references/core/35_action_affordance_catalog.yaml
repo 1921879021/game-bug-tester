@@ -1,0 +1,99 @@
+version: 2.3.0
+purpose: 将 Semantic Role 转成智能体可以安全推理的“可做什么”证据，不把控件名称直接等同于业务含义。
+roles:
+  start_button:
+    kind: action
+    risk: low
+    capabilities: [enter_gameplay]
+  continue_button:
+    kind: action
+    risk: low
+    capabilities: [resume_gameplay, continue_flow]
+  settings_button:
+    kind: action
+    risk: low
+    capabilities: [open_settings]
+  inventory_button:
+    kind: action
+    risk: low
+    capabilities: [open_inventory]
+  quest_button:
+    kind: action
+    risk: low
+    capabilities: [open_quest]
+  shop_button:
+    kind: action
+    risk: low
+    capabilities: [open_shop]
+  pause_button:
+    kind: action
+    risk: low
+    capabilities: [pause_game]
+  close_button:
+    kind: action
+    risk: low
+    capabilities: [close_overlay]
+  back_button:
+    kind: action
+    risk: low
+    capabilities: [navigate_back]
+  buy_button:
+    kind: action
+    risk: test_env_only
+    capabilities: [purchase]
+  claim_button:
+    kind: action
+    risk: test_env_only
+    capabilities: [claim_reward]
+  confirm_button:
+    kind: action
+    risk: guarded
+    capabilities: [confirm]
+  cancel_button:
+    kind: action
+    risk: low
+    capabilities: [cancel]
+  save_button:
+    kind: action
+    risk: guarded
+    capabilities: [save]
+  load_button:
+    kind: action
+    risk: guarded
+    capabilities: [load]
+  respawn_button:
+    kind: action
+    risk: guarded
+    capabilities: [respawn]
+  login_button:
+    kind: action
+    risk: guarded
+    capabilities: [login]
+  gameplay_hud:
+    kind: anchor
+    risk: none
+    capabilities: [observe_gameplay_state]
+  player:
+    kind: object
+    risk: none
+    capabilities: [observe_player]
+  coins_text:
+    kind: state
+    risk: none
+    capabilities: [read_currency]
+  hp_text:
+    kind: state
+    risk: none
+    capabilities: [read_hp]
+  level_text:
+    kind: state
+    risk: none
+    capabilities: [read_level]
+  item_price_text:
+    kind: state
+    risk: none
+    capabilities: [read_displayed_price]
+  fps_text:
+    kind: metric
+    risk: none
+    capabilities: [read_fps]

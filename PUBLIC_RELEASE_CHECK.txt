@@ -1,0 +1,22 @@
+GITHUB-READY RELEASE CHECK: PASS
+Release: 1.0.0
+Knowledge baseline: v3.4
+Bug patterns: 81
+Repository files: 93
+Mandatory Python files: 0
+Portable SKILL frontmatter: PASS (name + description only)
+Codex project-local layout: PASS
+Claude Code project-local layout: PASS
+Codex install.sh smoke test: PASS
+Claude install.sh smoke test: PASS
+Self-install recursion guard: PASS
+YAML parse check: PASS
+Local Markdown link check: PASS
+Native workflows: Unity / Unreal / Godot / Generic
+Optional adapters: AltTester / Airtest-Poco
+No-install policy: PRESENT
+GitHub issue forms: PRESENT
+GitHub PR template: PRESENT
+GitHub validation workflow: PRESENT
+GitHub tag packaging workflow: PRESENT
+PowerShell helper: static review only (pwsh unavailable in build container)

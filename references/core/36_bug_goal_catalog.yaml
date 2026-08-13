@@ -1,0 +1,551 @@
+version: 2.9.0
+purpose: 把 Bug Pattern / Test Plan 转成“去哪里、需要哪些控件、执行什么动作、Oracle 需要什么规则”。
+bug_overrides:
+  STAB-001: navigation_smoke
+  STAB-004: pause_resume
+  UI-001: navigation_smoke
+  UI-002: close_path
+  UI-004: close_path
+  GAME-004: quest_observation
+  GAME-005: shop_purchase_transaction
+  SAVE-005: persistent_state_test
+  AUDIO-003: settings_observation
+  NAV-001: movement_progress
+  NAV-002: world_bounds_guard
+  PHY-001: dash_collision_boundary
+  PHY-002: ground_support_observation
+  PHY-003: collision_stability_observation
+  CHAR-001: death_input_lock
+  CHAR-002: crowd_control_lock_observation
+  CHAR-003: action_recovery_observation
+  CHAR-004: respawn_cleanup_observation
+  GAME-001: combat_damage
+  GAME-002: cooldown_integrity_observation
+  PHY-004: projectile_dynamic_test
+  PHY-005: projectile_dynamic_test
+  AI-001: enemy_ai_dynamic_test
+  AI-002: enemy_ai_dynamic_test
+  AI-003: enemy_ai_dynamic_test
+  AI-004: enemy_ai_dynamic_test
+  AI-005: enemy_ai_dynamic_test
+  PHY-006: advanced_projectile_test
+  PHY-007: advanced_projectile_test
+  PHY-008: advanced_projectile_test
+  AI-006: advanced_ai_test
+  AI-007: advanced_ai_test
+  AI-008: advanced_ai_test
+  GAME-007: advanced_projectile_test
+  SAVE-001: persistent_state_test
+  SAVE-002: persistent_state_test
+  SAVE-003: persistent_state_test
+  SAVE-004: persistent_state_test
+  SAVE-006: persistent_state_test
+  SAVE-007: persistent_state_test
+  SAVE-008: persistent_state_test
+  NET-001: multiplayer_state_test
+  NET-002: multiplayer_state_test
+  NET-003: multiplayer_state_test
+  NET-004: multiplayer_state_test
+  NET-005: multiplayer_state_test
+  NET-007: multiplayer_state_test
+  NET-008: multiplayer_state_test
+  NET-009: multiplayer_state_test
+  NET-011: multiplayer_state_test
+  NET-013: multiplayer_state_test
+  NET-015: multiplayer_state_test
+feature_rules:
+- any_features:
+  - shop
+  - economy
+  template: shop_observation
+- any_features:
+  - quest
+  - reward
+  template: quest_observation
+- any_features:
+  - inventory
+  - equipment
+  - pickup
+  template: inventory_observation
+- any_features:
+  - settings
+  template: settings_observation
+- any_features:
+  - pause
+  template: pause_resume
+- any_features:
+  - launch
+  - main_menu
+  template: navigation_smoke
+- any_features:
+  - gameplay
+  - combat
+  - movement
+  - skill
+  - death
+  - respawn
+  template: gameplay_observation
+templates:
+  navigation_smoke:
+    description: 从根状态导航到首个游戏态并验证关键锚点存在。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - gameplay_hud
+    required_roles:
+    - gameplay_hud
+    action_roles: []
+    observe_roles:
+    - gameplay_hud
+    safety: safe
+    oracle_mode: partial
+  pause_resume:
+    description: 导航到 gameplay，执行暂停/继续，验证流程可恢复。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - pause_button
+    required_roles:
+    - pause_button
+    - continue_button
+    action_roles:
+    - pause_button
+    - continue_button
+    observe_roles:
+    - gameplay_hud
+    safety: safe
+    oracle_mode: partial
+  close_path:
+    description: 进入一个可关闭页面并验证存在关闭/返回路径。
+    screen_hints:
+    - inventory
+    - quest
+    - shop
+    - settings
+    - pause
+    target_roles:
+    - close_button
+    - back_button
+    required_roles: []
+    required_role_groups:
+    - - close_button
+      - back_button
+    action_roles: []
+    observe_roles: []
+    safety: safe
+    oracle_mode: partial
+  shop_purchase_transaction:
+    description: 自动进入商店，读取货币/价格，执行一次购买并检查项目提供的交易 invariant。
+    screen_hints:
+    - shop
+    target_roles:
+    - buy_button
+    - item_price_text
+    required_roles:
+    - buy_button
+    action_roles:
+    - buy_button
+    observe_roles:
+    - coins_text
+    - item_price_text
+    safety: test_env_only
+    oracle_mode: project_rule_required
+  rapid_click_guard:
+    description: 在业务按钮上执行高速连点并观察关键状态是否只发生允许的变化。
+    screen_hints:
+    - shop
+    target_roles:
+    - buy_button
+    required_roles:
+    - buy_button
+    action_roles:
+    - buy_button
+    observe_roles:
+    - coins_text
+    - item_price_text
+    safety: test_env_only
+    oracle_mode: project_rule_required
+  shop_observation:
+    description: 自动进入商店并采集可见交易状态，默认不执行购买。
+    screen_hints:
+    - shop
+    target_roles:
+    - buy_button
+    - item_price_text
+    required_roles:
+    - buy_button
+    action_roles: []
+    observe_roles:
+    - coins_text
+    - item_price_text
+    safety: safe
+    oracle_mode: manual
+  quest_observation:
+    description: 自动进入任务页，采集界面与状态证据；领取奖励仍需专用安全规则。
+    screen_hints:
+    - quest
+    target_roles:
+    - quest_button
+    - close_button
+    required_roles: []
+    action_roles: []
+    observe_roles: []
+    safety: safe
+    oracle_mode: manual
+  inventory_observation:
+    description: 自动进入背包并采集 UI/性能/状态证据。
+    screen_hints:
+    - inventory
+    target_roles:
+    - inventory_button
+    - close_button
+    required_roles: []
+    action_roles: []
+    observe_roles: []
+    safety: safe
+    oracle_mode: manual
+  settings_observation:
+    description: 自动进入设置页并采集设置控件/显示状态；具体配置值持久化需要项目规则。
+    screen_hints:
+    - settings
+    target_roles:
+    - settings_button
+    - back_button
+    required_roles: []
+    action_roles: []
+    observe_roles: []
+    safety: safe
+    oracle_mode: manual
+  gameplay_observation:
+    description: 自动进入 gameplay 并采集 HUD/角色状态；战斗、移动、物理需进一步接输入/世界状态探针。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - gameplay_hud
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - gameplay_hud
+    - player
+    - hp_text
+    safety: safe
+    oracle_mode: manual
+  screen_observation:
+    description: 自动导航到最相关的已知页面并截图，视觉 Oracle 由智能体/人工或项目规则完成。
+    screen_hints:
+    - settings
+    - gameplay
+    - inventory
+    - quest
+    - shop
+    target_roles: []
+    required_roles: []
+    action_roles: []
+    observe_roles: []
+    safety: safe
+    oracle_mode: manual
+  generic_observation:
+    description: 缺少专用模板时，只执行证据驱动的页面导航/观察，不猜业务动作。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - gameplay_hud
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - gameplay_hud
+    safety: safe
+    oracle_mode: manual
+  movement_progress:
+    description: 进入 gameplay，在项目确认的可通行测试点发送移动输入，并用角色世界坐标变化判定是否异常卡死。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    - gameplay_hud
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - move_forward
+    required_probes:
+    - player_position
+    safety: safe
+    oracle_mode: project_rule_required
+  world_bounds_guard:
+    description: 执行项目给定的边界/压力移动序列并检查角色坐标是否仍位于合法世界边界。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - move_forward
+    required_probes:
+    - player_position
+    safety: safe
+    oracle_mode: project_rule_required
+  dash_collision_boundary:
+    description: 在项目指定碰撞测试位发送冲刺/高速移动输入，检查最终位置是否跨过不可穿越边界。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - move_forward
+    - dash
+    required_probes:
+    - player_position
+    safety: safe
+    oracle_mode: project_rule_required
+  death_input_lock:
+    description: 在测试环境进入死亡态后发送移动和攻击输入，验证位置与攻击计数不得发生超出规则的变化。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - kill_player
+    - move_forward
+    - attack_primary
+    required_probes:
+    - player_alive
+    - player_position
+    - attack_count
+    safety: test_env_only
+    oracle_mode: project_rule_required
+  combat_damage:
+    description: 读取目标 HP，执行一次主攻击，再读取 HP，以项目提供的伤害规则验证数值变化。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - attack_primary
+    required_probes:
+    - target_hp
+    safety: test_env_only
+    oracle_mode: project_rule_required
+  ground_support_observation:
+    description: 采集角色位置/grounded 证据并执行移动或跳跃；完整穿地判定需项目地形/落点规则。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - move_forward
+    required_probes:
+    - player_position
+    safety: safe
+    oracle_mode: manual
+  collision_stability_observation:
+    description: 执行移动/冲刺并采集位置与速度，异常弹飞阈值由项目定义。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - move_forward
+    required_probes:
+    - player_position
+    safety: safe
+    oracle_mode: manual
+  crowd_control_lock_observation:
+    description: 受控状态下输入技能/冲刺并采集状态，控制规则由项目定义。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - skill_1
+    required_probes:
+    - player_state
+    safety: test_env_only
+    oracle_mode: manual
+  action_recovery_observation:
+    description: 执行动作后继续移动并采集角色状态，判断动作结束后是否恢复可操作。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - attack_primary
+    - move_forward
+    required_probes:
+    - player_position
+    safety: safe
+    oracle_mode: manual
+  respawn_cleanup_observation:
+    description: 测试环境完成死亡/复活后采集存活与状态效果，具体清理规则由项目定义。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - kill_player
+    - respawn
+    required_probes:
+    - player_alive
+    safety: test_env_only
+    oracle_mode: manual
+  cooldown_integrity_observation:
+    description: 释放技能后读取冷却并尝试状态切换/再次释放，具体冷却持续规则由项目定义。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - skill_1
+    required_probes:
+    - skill_1_cooldown
+    safety: test_env_only
+    oracle_mode: manual
+  projectile_dynamic_test:
+    description: 进入 gameplay，在安全测试环境布置高速/遮挡 projectile test site，并通过真实投射物 telemetry
+      与目标状态判定。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - fire_projectile
+    required_probes:
+    - projectile_hit_count
+    - projectile_last_hit_id
+    - projectile_target_hp
+    safety: test_env_only
+    oracle_mode: project_rule_required
+  enemy_ai_dynamic_test:
+    description: 进入 gameplay，按项目 AI Contract 布置敌人与目标位置，通过导航/攻击/目标丢失 telemetry 判定动态
+      AI 行为。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - set_ai_position
+    - set_ai_target_position
+    required_probes:
+    - ai_position
+    - ai_state
+    - ai_distance_to_target
+    - ai_attack_count
+    safety: test_env_only
+    oracle_mode: project_rule_required
+  advanced_projectile_test:
+    description: 在安全测试 Build 中按 Advanced Projectile Contract 布置弹道/AOE/穿透/命中点测试，读取真实
+      projectile telemetry 与目标状态。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - advanced_projectile_test_hook
+    required_probes:
+    - advanced_projectile_telemetry
+    safety: test_env_only
+    oracle_mode: project_rule_required
+  advanced_ai_test:
+    description: 在安全测试 Build 中按 Advanced AI Contract 启用动态障碍或 Crowd 测试夹具，以重寻路/到达率/分离度
+      telemetry 判定。
+    screen_hints:
+    - gameplay
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions:
+    - advanced_ai_test_hook
+    required_probes:
+    - advanced_ai_telemetry
+    safety: test_env_only
+    oracle_mode: project_rule_required
+  persistent_state_test:
+    description: 进入安全测试环境，按 Persistence Contract 生成 round-trip、restart、atomicity、scene
+      transition、corruption recovery、migration 或 session reset 测试；最终由持久化快照而非 UI 文案判定。
+    screen_hints:
+    - gameplay
+    - settings
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions: []
+    required_probes: []
+    safety: test_env_only
+    oracle_mode: project_rule_required
+    execution_layer: persistence_model
+  multiplayer_state_test:
+    description: 在隔离测试环境按 Network Contract 编排 authoritative state、多客户端副本、断线重连、幂等请求、同时交互、host
+      leave 与网络条件，使用服务端/会话 telemetry 判定。
+    screen_hints:
+    - gameplay
+    - lobby
+    target_roles:
+    - player
+    required_roles: []
+    action_roles: []
+    observe_roles:
+    - player
+    required_gameplay_actions: []
+    required_probes: []
+    safety: test_env_only
+    oracle_mode: project_rule_required
+    execution_layer: network_model

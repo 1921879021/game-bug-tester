@@ -1,0 +1,26 @@
+id: BUG-0001
+title: ""
+status: suspected # confirmed|suspected|not_reproduced|expected_behavior
+severity: S2
+priority: P2
+build: "unknown"
+platform: "unknown"
+engine: "unknown"
+module: ""
+scene_or_map: "unknown"
+preconditions: []
+reproduction_steps: []
+expected: ""
+actual: ""
+reproducibility:
+  reproduced: 0
+  attempts: 0
+evidence_grade: C # A|B|C|D
+evidence:
+  screenshots: []
+  videos: []
+  logs: []
+  telemetry: []
+network_condition: "unknown"
+workaround: "unknown"
+notes: ""

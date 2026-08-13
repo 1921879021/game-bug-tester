@@ -1,0 +1,772 @@
+version: 1.1.0
+safety_levels:
+  safe: 通常可在测试账号/本地环境执行
+  test_env_only: 仅测试服/测试账号/可回滚数据环境
+combinations:
+- id: COMBO-001
+  name: 死亡瞬间攻击
+  tags:
+  - combat_state
+  required_features:
+  - combat
+  - death
+  sequence:
+  - death
+  - attack
+  target_bug_ids:
+  - CHAR-001
+  invariant: 死亡态不得产生新的攻击/伤害事件
+  safety: safe
+- id: COMBO-002
+  name: 死亡瞬间移动/冲刺
+  tags:
+  - death_respawn
+  required_features:
+  - movement
+  - death
+  sequence:
+  - death
+  - move_or_dash
+  target_bug_ids:
+  - CHAR-001
+  invariant: 死亡态移动约束保持一致
+  safety: safe
+- id: COMBO-003
+  name: 眩晕期间技能
+  tags:
+  - combat_state
+  required_features:
+  - combat
+  - skill
+  - crowd_control
+  sequence:
+  - apply_stun
+  - cast_skill
+  target_bug_ids:
+  - CHAR-002
+  invariant: 受控态技能限制符合设计
+  safety: safe
+- id: COMBO-004
+  name: 眩晕期间冲刺
+  tags:
+  - combat_state
+  required_features:
+  - movement
+  - dash
+  - crowd_control
+  sequence:
+  - apply_stun
+  - dash
+  target_bug_ids:
+  - CHAR-002
+  invariant: 受控态移动限制符合设计
+  safety: safe
+- id: COMBO-005
+  name: 攻击动作中打开菜单
+  tags:
+  - combat_state
+  required_features:
+  - combat
+  - ui
+  sequence:
+  - attack
+  - open_menu
+  - close_menu
+  target_bug_ids:
+  - CHAR-003
+  - UI-003
+  invariant: 返回游戏后状态机可继续且 UI/真实状态一致
+  safety: safe
+- id: COMBO-006
+  name: 技能后立即切装备
+  tags:
+  - combat_state
+  required_features:
+  - skill
+  - equipment
+  sequence:
+  - cast_skill
+  - change_equipment
+  target_bug_ids:
+  - GAME-002
+  - UI-003
+  invariant: 冷却/属性状态不能被切装备绕过
+  safety: safe
+- id: COMBO-007
+  name: 复活后输入连发
+  tags:
+  - death_respawn
+  required_features:
+  - respawn
+  - input
+  sequence:
+  - respawn
+  - rapid_input
+  target_bug_ids:
+  - CHAR-004
+  - INPUT-002
+  invariant: 复活初始化完成前后输入只产生合法行为
+  safety: safe
+- id: COMBO-008
+  name: 复活后残留 Buff/无敌
+  tags:
+  - death_respawn
+  required_features:
+  - respawn
+  - combat
+  sequence:
+  - apply_buff
+  - die
+  - respawn
+  - inspect_state
+  target_bug_ids:
+  - CHAR-004
+  invariant: 仅保留设计允许的状态
+  safety: safe
+- id: COMBO-009
+  name: 跳跃+冲刺撞墙
+  tags:
+  - movement_edge
+  required_features:
+  - movement
+  - jump
+  - dash
+  sequence:
+  - jump
+  - dash_into_wall
+  target_bug_ids:
+  - PHY-001
+  - NAV-002
+  invariant: 角色不穿越不可通行边界
+  safety: safe
+- id: COMBO-010
+  name: 斜坡/台阶落地边缘
+  tags:
+  - movement_edge
+  required_features:
+  - movement
+  - jump
+  sequence:
+  - approach_slope_or_stairs
+  - jump_or_land_at_edge
+  target_bug_ids:
+  - PHY-002
+  - NAV-001
+  invariant: 角色不穿地、不永久卡住
+  safety: safe
+- id: COMBO-011
+  name: 移动平台边缘跳跃
+  tags:
+  - platform
+  required_features:
+  - movement
+  - moving_platform
+  - jump
+  sequence:
+  - ride_platform
+  - move_to_edge
+  - jump_at_transition
+  target_bug_ids:
+  - NAV-002
+  - PHY-002
+  invariant: 角色保持合法支撑/落点
+  safety: safe
+- id: COMBO-012
+  name: 狭窄角落持续移动
+  tags:
+  - movement_edge
+  required_features:
+  - movement
+  sequence:
+  - enter_narrow_corner
+  - hold_movement
+  target_bug_ids:
+  - NAV-001
+  - PHY-003
+  invariant: 不永久卡死、不异常弹飞
+  safety: safe
+- id: COMBO-013
+  name: 靠墙旋转相机
+  tags:
+  - camera
+  required_features:
+  - camera
+  - movement
+  sequence:
+  - back_against_wall
+  - rotate_camera
+  target_bug_ids:
+  - VIS-003
+  invariant: 相机不暴露严重地图外内容
+  safety: safe
+- id: COMBO-014
+  name: 高速投射物近距离命中
+  tags:
+  - weapon
+  required_features:
+  - combat
+  - projectile
+  sequence:
+  - move_close
+  - fire_high_speed_projectile
+  target_bug_ids:
+  - PHY-004
+  invariant: 符合命中条件时触发命中/伤害
+  safety: safe
+- id: COMBO-015
+  name: 换弹+切枪
+  tags:
+  - weapon
+  required_features:
+  - weapon
+  - reload
+  sequence:
+  - start_reload
+  - switch_weapon
+  - switch_back
+  target_bug_ids:
+  - CHAR-003
+  - GAME-006
+  invariant: 弹药/动作状态按设计结算且不锁死
+  safety: safe
+- id: COMBO-016
+  name: 射击+死亡
+  tags:
+  - weapon
+  required_features:
+  - combat
+  - death
+  sequence:
+  - fire
+  - die_same_window
+  target_bug_ids:
+  - CHAR-001
+  invariant: 死亡窗口后的攻击结算遵循设计且不无限续发
+  safety: safe
+- id: COMBO-017
+  name: 拾取+背包满
+  tags:
+  - inventory
+  required_features:
+  - inventory
+  - pickup
+  sequence:
+  - fill_inventory
+  - pickup_item
+  target_bug_ids:
+  - GAME-003
+  invariant: 失败/替换/掉落结果唯一且库存守恒
+  safety: safe
+- id: COMBO-018
+  name: 拾取瞬间切场景
+  tags:
+  - inventory
+  required_features:
+  - pickup
+  - scene_loading
+  sequence:
+  - trigger_pickup
+  - scene_change
+  target_bug_ids:
+  - GAME-003
+  - SAVE-004
+  invariant: 物品世界状态与库存状态不能双重存在/双重丢失
+  safety: safe
+- id: COMBO-019
+  name: 快速重复拾取
+  tags:
+  - inventory
+  required_features:
+  - pickup
+  - input
+  sequence:
+  - target_same_pickup
+  - rapid_interact
+  target_bug_ids:
+  - GAME-003
+  - INPUT-002
+  invariant: 单一拾取实体最多结算一次
+  safety: safe
+- id: COMBO-020
+  name: 装备/卸下后属性刷新
+  tags:
+  - inventory
+  required_features:
+  - equipment
+  sequence:
+  - record_stats
+  - equip
+  - unequip
+  - record_stats
+  target_bug_ids:
+  - UI-003
+  - GAME-006
+  invariant: 属性 delta 与装备规则一致
+  safety: safe
+- id: COMBO-021
+  name: 任务完成瞬间切场景
+  tags:
+  - quest
+  required_features:
+  - quest
+  - scene_loading
+  sequence:
+  - meet_quest_condition
+  - scene_change
+  target_bug_ids:
+  - GAME-004
+  invariant: 任务状态与奖励只发生一次且持久
+  safety: safe
+- id: COMBO-022
+  name: 快速重复领取任务奖励
+  tags:
+  - reward
+  required_features:
+  - quest
+  - reward
+  - input
+  sequence:
+  - complete_quest
+  - rapid_claim
+  target_bug_ids:
+  - GAME-004
+  - INPUT-002
+  invariant: 奖励幂等，只结算一次
+  safety: test_env_only
+- id: COMBO-023
+  name: 断线时领取奖励
+  tags:
+  - network
+  required_features:
+  - network
+  - reward
+  sequence:
+  - disconnect
+  - claim_reward
+  - reconnect
+  target_bug_ids:
+  - NET-002
+  - NET-004
+  invariant: 服务端权威结果唯一且客户端最终收敛
+  safety: test_env_only
+- id: COMBO-024
+  name: 匹配成功瞬间取消
+  tags:
+  - network
+  required_features:
+  - matchmaking
+  - network
+  sequence:
+  - start_matchmaking
+  - cancel_at_match_found
+  target_bug_ids:
+  - NET-006
+  invariant: 最终只有一个合法匹配状态
+  safety: safe
+- id: COMBO-025
+  name: 战斗中断线重连
+  tags:
+  - network
+  required_features:
+  - network
+  - combat
+  sequence:
+  - enter_combat
+  - disconnect
+  - reconnect
+  target_bug_ids:
+  - NET-003
+  - NET-004
+  invariant: 重连成功或明确失败，关键状态与权威端一致
+  safety: test_env_only
+- id: COMBO-026
+  name: 结算瞬间断线
+  tags:
+  - match_end
+  required_features:
+  - network
+  - reward
+  sequence:
+  - reach_match_end
+  - disconnect_during_settlement
+  - reconnect
+  target_bug_ids:
+  - NET-002
+  - NET-004
+  invariant: 奖励/排名只结算一次且可恢复
+  safety: test_env_only
+- id: COMBO-027
+  name: 房主退出时客户端操作
+  tags:
+  - network
+  required_features:
+  - multiplayer
+  - host_client
+  sequence:
+  - host_leave
+  - client_action
+  target_bug_ids:
+  - NET-005
+  invariant: 会话按设计迁移/结束且不永久卡死
+  safety: test_env_only
+- id: COMBO-028
+  name: 保存+立即切场景
+  tags:
+  - save
+  required_features:
+  - save_load
+  - scene_loading
+  sequence:
+  - change_state
+  - save
+  - scene_change
+  - reload
+  target_bug_ids:
+  - SAVE-004
+  invariant: 加载后是完整的一致快照
+  safety: safe
+- id: COMBO-029
+  name: 保存+死亡
+  tags:
+  - save
+  required_features:
+  - save_load
+  - death
+  sequence:
+  - change_state
+  - save
+  - die
+  - reload
+  target_bug_ids:
+  - SAVE-004
+  - SAVE-002
+  invariant: 存档事务边界明确，不混合新旧状态
+  safety: safe
+- id: COMBO-030
+  name: 保存提示后立即退出
+  tags:
+  - save
+  required_features:
+  - save_load
+  sequence:
+  - change_state
+  - save
+  - exit_after_success_signal
+  - reload
+  target_bug_ids:
+  - SAVE-002
+  invariant: 成功提示对应的数据确已持久化
+  safety: safe
+- id: COMBO-031
+  name: 重复保存同一槽位
+  tags:
+  - save
+  required_features:
+  - save_load
+  sequence:
+  - save
+  - change_state
+  - save_again
+  - reload
+  target_bug_ids:
+  - SAVE-003
+  invariant: 合法重复保存不产生坏档
+  safety: safe
+- id: COMBO-032
+  name: 暂停+死亡事件
+  tags:
+  - combat_state
+  required_features:
+  - pause
+  - death
+  sequence:
+  - pause
+  - trigger_or_wait_death_event
+  - resume
+  target_bug_ids:
+  - CHAR-003
+  - STAB-004
+  invariant: 状态优先级确定，恢复后不锁死/黑屏
+  safety: safe
+- id: COMBO-033
+  name: 加载中持续输入
+  tags:
+  - scene
+  required_features:
+  - scene_loading
+  - input
+  sequence:
+  - start_scene_load
+  - spam_input
+  - wait_loaded
+  target_bug_ids:
+  - INPUT-002
+  - CHAR-003
+  invariant: 加载完成后无残留输入导致非法动作
+  safety: safe
+- id: COMBO-034
+  name: 切前后台时移动输入按住
+  tags:
+  - lifecycle
+  required_features:
+  - lifecycle
+  - movement
+  sequence:
+  - hold_move
+  - background
+  - foreground
+  - release
+  target_bug_ids:
+  - INPUT-003
+  - STAB-004
+  invariant: 恢复后输入状态重置且画面可恢复
+  safety: safe
+- id: COMBO-035
+  name: 分辨率/比例切换+弹窗
+  tags:
+  - ui_stack
+  required_features:
+  - ui
+  - settings
+  sequence:
+  - open_popup
+  - change_resolution_or_aspect
+  - inspect
+  target_bug_ids:
+  - UI-002
+  - UI-005
+  invariant: 关键控件仍可见可达
+  safety: safe
+- id: COMBO-036
+  name: 嵌套弹窗连续返回
+  tags:
+  - ui_stack
+  required_features:
+  - ui
+  sequence:
+  - open_nested_popups
+  - press_back_repeatedly
+  target_bug_ids:
+  - UI-004
+  - UI-002
+  invariant: 界面栈按层级关闭且不误退出
+  safety: safe
+- id: COMBO-037
+  name: 按钮快速连点
+  tags:
+  - input
+  required_features:
+  - ui
+  - input
+  sequence:
+  - locate_enabled_action
+  - rapid_click
+  target_bug_ids:
+  - INPUT-001
+  - INPUT-002
+  invariant: 一次业务动作只结算一次或受节流约束
+  safety: test_env_only
+- id: COMBO-038
+  name: 货币恰好等于价格
+  tags:
+  - economy
+  required_features:
+  - shop
+  - economy
+  sequence:
+  - set_or_reach_exact_currency
+  - purchase
+  target_bug_ids:
+  - GAME-005
+  - GAME-006
+  invariant: 边界条件成功且余额正确
+  safety: test_env_only
+- id: COMBO-039
+  name: 货币比价格少1
+  tags:
+  - economy
+  required_features:
+  - shop
+  - economy
+  sequence:
+  - set_or_reach_price_minus_one
+  - purchase
+  target_bug_ids:
+  - GAME-005
+  - GAME-006
+  invariant: 购买失败且不扣款/不发货
+  safety: test_env_only
+- id: COMBO-040
+  name: 交易提交时网络重试
+  tags:
+  - economy
+  required_features:
+  - shop
+  - economy
+  - network
+  sequence:
+  - submit_purchase
+  - timeout_or_disconnect
+  - retry
+  target_bug_ids:
+  - NET-002
+  - GAME-005
+  invariant: 交易原子且幂等
+  safety: test_env_only
+- id: COMBO-041
+  name: 建造/合成提交时重复点击
+  tags:
+  - crafting
+  required_features:
+  - crafting
+  - building
+  - input
+  sequence:
+  - prepare_exact_materials
+  - rapid_submit
+  target_bug_ids:
+  - INPUT-002
+  - GAME-006
+  invariant: 资源扣除与产出次数一致
+  safety: test_env_only
+- id: COMBO-042
+  name: 建造物贴近碰撞边界
+  tags:
+  - building
+  required_features:
+  - building
+  - physics
+  sequence:
+  - place_near_boundary
+  - confirm
+  - move_around
+  target_bug_ids:
+  - PHY-003
+  - NAV-001
+  invariant: 放置规则与碰撞规则一致，不制造不可恢复卡点
+  safety: safe
+- id: COMBO-043
+  name: 时间加速跨越计时完成点
+  tags:
+  - simulation_time
+  required_features:
+  - simulation
+  - time_scale
+  - timer
+  sequence:
+  - record_timer
+  - increase_time_scale
+  - cross_completion
+  - restore_speed
+  target_bug_ids:
+  - GAME-006
+  invariant: 计时事件只触发一次且最终状态正确
+  safety: safe
+- id: COMBO-044
+  name: 长会话反复开关大列表
+  tags:
+  - large_ui
+  required_features:
+  - ui
+  - large_list
+  sequence:
+  - open_close_large_list_many_times
+  - record_memory_and_latency
+  target_bug_ids:
+  - PERF-002
+  - PERF-004
+  invariant: 内存不持续无界增长，响应不持续恶化
+  safety: safe
+- id: COMBO-045
+  name: 长会话反复切场景
+  tags:
+  - long_session
+  required_features:
+  - scene_loading
+  sequence:
+  - repeat_scene_enter_exit
+  - record_memory_and_load_time
+  target_bug_ids:
+  - PERF-002
+  - PERF-003
+  - STAB-003
+  invariant: 不崩溃，内存/加载时间不持续恶化
+  safety: safe
+- id: COMBO-046
+  name: 越过 checkpoint 后立即重置
+  tags:
+  - checkpoint
+  required_features:
+  - checkpoint
+  - respawn
+  sequence:
+  - cross_checkpoint
+  - immediate_reset_or_death
+  - respawn
+  target_bug_ids:
+  - NAV-004
+  - SAVE-004
+  invariant: 复活点/进度点是合法且一致的
+  safety: safe
+- id: COMBO-047
+  name: 赛道边界高速撞击后重置
+  tags:
+  - vehicle
+  required_features:
+  - vehicle
+  - track
+  - physics
+  sequence:
+  - high_speed_boundary_collision
+  - reset_vehicle
+  target_bug_ids:
+  - PHY-003
+  - NAV-004
+  invariant: 车辆不飞出不可恢复区域且重置落点合法
+  safety: safe
+- id: COMBO-048
+  name: 控制器热切换
+  tags:
+  - controller
+  required_features:
+  - controller
+  - keyboard_mouse
+  sequence:
+  - use_controller
+  - switch_to_keyboard
+  - switch_back
+  target_bug_ids:
+  - INPUT-004
+  invariant: 输入与提示及时切换且无粘键
+  safety: safe
+- id: COMBO-049
+  name: 关卡胜利瞬间重开
+  tags:
+  - level_state
+  required_features:
+  - level
+  - ui
+  sequence:
+  - trigger_win
+  - restart_same_window
+  target_bug_ids:
+  - GAME-004
+  - CHAR-003
+  invariant: 最终关卡状态唯一，奖励不重复
+  safety: test_env_only
+- id: COMBO-050
+  name: 失败结算瞬间切前后台
+  tags:
+  - lifecycle
+  required_features:
+  - level
+  - lifecycle
+  sequence:
+  - trigger_fail
+  - background
+  - foreground
+  target_bug_ids:
+  - STAB-004
+  - UI-003
+  invariant: 恢复后结算/UI 状态一致且可继续
+  safety: safe

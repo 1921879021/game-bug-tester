@@ -1,0 +1,22 @@
+id: TC-0001
+title: ""
+module: ""
+mode: SMOKE # SMOKE|NORMAL|EDGE|STRESS|CHAOS|REGRESSION
+risk_category: STAB
+bug_pattern: ""
+priority: high
+preconditions: []
+steps:
+  - action: ""
+    data: null
+expected: ""
+oracle:
+  type: state_consistency
+  rule: ""
+evidence_required:
+  - screenshot
+cleanup: []
+result:
+  status: not_run # passed|failed|blocked|not_run
+  actual: ""
+  evidence: []

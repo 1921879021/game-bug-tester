@@ -1,0 +1,69 @@
+version: 2.4.0
+purpose: 统一不同引擎/平台的语义 Gameplay Action 与 World Probe 名称。Skill 只使用语义名，具体按键、组件方法或触摸坐标由项目配置映射。
+actions:
+  move_forward:
+    category: movement
+    risk: safe
+    examples:
+    - W
+    - virtual joystick up
+  move_backward:
+    category: movement
+    risk: safe
+  strafe_left:
+    category: movement
+    risk: safe
+  strafe_right:
+    category: movement
+    risk: safe
+  jump:
+    category: movement
+    risk: safe
+  dash:
+    category: movement
+    risk: safe
+  attack_primary:
+    category: combat
+    risk: test_env_preferred
+  attack_secondary:
+    category: combat
+    risk: test_env_preferred
+  skill_1:
+    category: combat
+    risk: test_env_preferred
+  interact:
+    category: interaction
+    risk: guarded
+  respawn:
+    category: state
+    risk: test_env_only
+  kill_player:
+    category: test_hook
+    risk: test_env_only
+    note: 仅允许测试构建/安全环境中的明确测试钩子。
+probes:
+  player_position:
+    type: vector3
+  player_velocity:
+    type: vector3
+  player_alive:
+    type: bool
+  player_state:
+    type: string
+  grounded:
+    type: bool
+  attack_count:
+    type: number
+  target_hp:
+    type: number
+  skill_1_cooldown:
+    type: number
+  active_status_effects:
+    type: list
+  world_bounds:
+    type: bounds
+principles:
+- 语义动作不得假定具体键位。
+- World Probe 必须来自可验证的对象属性、测试接口、遥测或明确视觉 Oracle。
+- 测试钩子动作默认 test_env_only。
+- 无法获得世界状态时降级为 READY_WITH_MANUAL_ORACLE/NEEDS_GAMEPLAY_CAPABILITY，不伪造内部状态。

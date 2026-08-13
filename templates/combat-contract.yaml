@@ -1,0 +1,14 @@
+version: 2.6.0
+combat:
+  primary_attack:
+    action: attack_primary
+    type: direct_or_hitscan
+    range: null
+    damage: null
+    requires_line_of_sight: true
+    dead_target_behavior: null
+  runtime_contract:
+    target_hp_probe: target_hp
+    player_position_probe: player_position
+    target_position_probe: target_position
+safe_environment_required: true

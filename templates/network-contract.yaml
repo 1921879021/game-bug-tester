@@ -1,0 +1,109 @@
+network:
+  enabled: true
+  topology:
+    mode: host_client
+    server_id: server
+    clients:
+    - client_a
+    - client_b
+    host_id: client_a
+  authority:
+    model: server_authoritative
+    replicated_fields:
+    - hp
+    - coins
+    - quest_stage
+    - active_scene
+  actions:
+    reset_fixture: reset_network_fixture
+    server_set_state: server_set_state
+    disconnect_client: disconnect_client
+    reconnect_client: reconnect_client
+    set_profile: set_network_profile
+    submit_idempotent_reward: submit_idempotent_reward
+    simultaneous_claim: simultaneous_claim
+    host_leave: host_leave
+    transition_scene: transition_scene
+  probes:
+    authoritative_state: authoritative_state
+    client_state: client_state
+    connection_state: connection_state
+    grant_count: grant_count
+    claim_count: claim_count
+    claim_owner: claim_owner
+    current_host: current_host
+    player_entity_count: player_entity_count
+  contracts:
+    replication_convergence:
+      enabled: true
+      fields:
+      - hp
+      - coins
+      - quest_stage
+      convergence_window_s: 0.4
+    reconnect_resync:
+      enabled: true
+      client_id: client_b
+      fields:
+      - hp
+      - coins
+      - quest_stage
+      reconnect_window_s: 0.8
+    idempotent_retry:
+      enabled: true
+      expected_grant_count: 1
+    simultaneous_claim:
+      enabled: true
+      clients:
+      - client_a
+      - client_b
+    host_leave:
+      enabled: true
+      behavior: migrate
+      fields:
+      - hp
+      - coins
+      - quest_stage
+      - active_scene
+      migration_window_s: 0.5
+    adverse_network_convergence:
+      enabled: true
+      fields:
+      - hp
+      - coins
+      - quest_stage
+      profile:
+        latency_ms: 180
+        jitter_ms: 40
+        packet_loss_pct: 5
+      convergence_window_s: 1.2
+    scene_sync:
+      enabled: true
+      convergence_window_s: 0.7
+    reconnect_entity_uniqueness:
+      enabled: true
+      client_id: client_b
+      expected_entity_count: 1
+      reconnect_window_s: 0.5
+  fixtures:
+    replication_update:
+      hp: 72
+      coins: 1080
+      quest_stage: 3
+    reconnect_update:
+      hp: 55
+      coins: 1250
+      quest_stage: 4
+    reward_request:
+      request_id: reward-match-42
+      client_id: client_b
+      field: coins
+      amount: 100
+    claim_object:
+      object_id: drop-unique-001
+    adverse_update:
+      hp: 64
+      coins: 1333
+      quest_stage: 5
+    target_scene:
+      scene: Dungeon_02
