@@ -3,13 +3,15 @@ $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 
 $required = @(
   'SKILL.md','README.md','README.zh-CN.md','VERSION','LICENSE','CONTRIBUTING.md',
-  'SECURITY.md','CODE_OF_CONDUCT.md','RELEASE_NOTES_v1.0.0.md','references/core/bug_catalog.yaml'
+  'SECURITY.md','CODE_OF_CONDUCT.md','RELEASE_NOTES_v1.1.0.md','references/core/bug_catalog.yaml',
+  'references/advanced/94_multidimensional_counterexample_minimization.md',
+  'references/advanced/95_native_multidimensional_recipes.md','templates/counterexample-minimization-contract.yaml','templates/minimization-report.yaml'
 )
 foreach ($item in $required) {
   if (-not (Test-Path (Join-Path $Root $item))) { throw "Missing required file: $item" }
 }
 
-if ((Get-Content (Join-Path $Root 'VERSION') -Raw).Trim() -ne '1.0.0') { throw 'Unexpected VERSION.' }
+if ((Get-Content (Join-Path $Root 'VERSION') -Raw).Trim() -ne '1.1.0') { throw 'Unexpected VERSION.' }
 
 $skillLines = Get-Content (Join-Path $Root 'SKILL.md')
 $skill = $skillLines -join "`n"
@@ -43,4 +45,4 @@ if ($py.Count -ne 0) { throw "Public zero-dependency release unexpectedly contai
 $stale = Get-ChildItem $Root -Recurse -File | Where-Object { $_.FullName -notmatch '\\.git\\' -and $_.Name -notin @('check-structure.sh','check-structure.ps1','PUBLIC_RELEASE_CHECK.txt') } | Select-String -Pattern '1\.0\.0-public|game-bug-tester-public' -ErrorAction SilentlyContinue
 if ($stale) { throw 'Stale pre-release naming found.' }
 
-Write-Host "Structure OK; version: 1.0.0; bug patterns: $($ids.Count); mandatory Python files: $($py.Count)"
+Write-Host "Structure OK; version: 1.1.0; bug patterns: $($ids.Count); mandatory Python files: $($py.Count)"

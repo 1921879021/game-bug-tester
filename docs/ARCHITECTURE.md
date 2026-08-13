@@ -17,7 +17,7 @@ Engine-native test / project-local harness
    ↓
 Evidence + Oracle
    ↓
-Reproduction + Shrinking
+Reproduction + Multi-Dimensional Minimization
    ↓
 Bug report + regression test
 ```
@@ -31,3 +31,24 @@ A public GitHub skill must work in heterogeneous repositories. Mandatory externa
 ## Why optional adapters remain
 
 Some bugs are easiest to reproduce by driving a built game. Object/image automation is valuable, but it belongs in an optional capability layer rather than the core dependency chain.
+
+
+## v1.1 / knowledge baseline v3.5
+
+The minimization layer now treats a failing reproducer as a structured counterexample with multiple dimensions:
+
+```text
+sequence
++ actors
++ parameters
++ timing
++ declared environment perturbation
+```
+
+The coding agent minimizes those dimensions with the **project's existing runtime/toolchain**. The repository intentionally does not add a mandatory minimizer executable or Python package.
+
+See:
+
+- `references/advanced/94_multidimensional_counterexample_minimization.md`
+- `references/advanced/95_native_multidimensional_recipes.md`
+- `templates/counterexample-minimization-contract.yaml`

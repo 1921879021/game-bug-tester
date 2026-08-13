@@ -31,4 +31,4 @@
 - [ ] Pull request template renders.
 - [ ] No local paths, credentials, generated logs, or binaries are committed.
 - [ ] Release notes are ready.
-- [ ] Tag `v1.0.0` only after the final commit passes CI.
+- [ ] Tag `v1.1.0` only after the final commit passes CI.

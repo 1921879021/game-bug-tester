@@ -15,3 +15,10 @@
 ## Multiplayer
 
 > Review and test reconnect, duplicate reward, simultaneous claim, state convergence, and host-migration risks. Do not touch production services.
+
+
+## Minimize a complex failure (v1.1 / v3.5)
+
+```text
+Use game-bug-tester to minimize this confirmed failing trace. Preserve the exact failure signature and use repeated runs. Reduce the action sequence first, then actors, parameters, timing, and any explicitly shrinkable environment perturbations. Prefer a stable human-usable reproducer. Do not install anything.
+```

@@ -76,3 +76,14 @@ A useful result includes:
 ## Do I need AltTester, Airtest, Poco, or Python?
 
 No for normal source-based use. Those are optional enhancements only. A compiled build with no source and no control interface cannot be fully automated by a coding agent; in that case the skill degrades to `BLACKBOX_ASSISTED` rather than installing tools behind your back.
+
+
+## v1.1: ask the agent to minimize a failing reproducer
+
+Example:
+
+```text
+Use game-bug-tester to minimize this failing reproduction. Preserve the same failure signature. Reduce unnecessary actions, parameters and timing constraints. Use only the project's existing engine/toolchain and do not install anything.
+```
+
+If the failure is timing-sensitive, ask for both the observed failure window and a stable replay point. If the current environment cannot measure the requested precision, the agent must say so instead of installing a timing tool.

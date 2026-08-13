@@ -23,3 +23,8 @@ Allowed by default:
 - collecting logs/results.
 
 If a capability is missing, degrade gracefully and report the limitation.
+
+
+## v1.1 / v3.5 minimization
+
+Multi-dimensional counterexample minimization does not change this policy. The agent must implement candidate generation/replay using the project's existing language/runtime or provide a manual/native matrix when runtime automation is impractical. It must not install a fuzzer, statistics package, timing library, or external QA framework solely to perform minimization.

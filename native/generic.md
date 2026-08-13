@@ -17,3 +17,7 @@ Then use the project's current language/runtime to create the smallest possible 
 - Rust: existing `cargo test` and project binaries.
 
 If no reliable automated control exists for a compiled graphical build, use `BLACKBOX_ASSISTED` rather than downloading a tool automatically.
+## v1.1 / v3.5 minimization
+
+The multi-dimensional reducer is intentionally runtime-agnostic: sequence ddmin, safe parameter candidates, timing search, repeated preservation checks, and fixed-point iteration can be implemented in the project's existing language. Do not introduce a new runtime solely for this feature. See `references/advanced/94_multidimensional_counterexample_minimization.md`.
+

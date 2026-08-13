@@ -5,7 +5,7 @@ description: Systematically test game projects for common bugs using the project
 
 # Game Bug Tester
 
-Public zero-mandatory-dependency edition. Knowledge baseline: v3.4.
+Public zero-mandatory-dependency edition. Knowledge baseline: v3.5.
 
 ## Mission
 
@@ -129,6 +129,25 @@ For bugs that depend on order/timing, use the algorithms in:
 - `references/advanced/87_failure_shrinking.md`
 - `references/advanced/90_stateful_sequence_fuzzing.md`
 - `references/advanced/92_sequence_shrinking.md`
+- `references/advanced/94_multidimensional_counterexample_minimization.md`
+- `references/advanced/95_native_multidimensional_recipes.md`
+
+### v3.5 — multi-dimensional counterexample minimization
+
+When a failing trace is too complex, minimize **action sequence + actors + parameters + timing + declared environment perturbations** while preserving the same failure signature.
+
+Rules:
+
+1. Confirm the baseline failure before shrinking.
+2. Delete actions/chunks first.
+3. Simplify actors only when identity/concurrency semantics are preserved.
+4. Shrink parameters only through project-declared valid domains or values derived from project code/config.
+5. Remove unnecessary waits before searching for a narrow timing window.
+6. Record actual timing; timing-invalid trials are test-quality failures, not product verdicts.
+7. Re-run candidates and require the configured preservation failure rate.
+8. Iterate dimensions to a fixed point because parameter/timing changes may make additional actions removable.
+9. Prefer a stable, human-usable reproducer over a needlessly fragile ultra-precise schedule.
+10. Emit what could not be minimized and why.
 
 These are **algorithms, not mandatory Python runners**. Implement them with tools already available in the current project/environment. If no practical runtime exists, provide a deterministic manual/engine-native test matrix instead of installing one.
 

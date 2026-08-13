@@ -30,3 +30,7 @@ The script should extend `SceneTree` or `MainLoop`, emit machine-readable result
 - Error/debug output.
 
 A tiny starter harness is available under `assets/native/godot/`.
+## v1.1 / v3.5 minimization
+
+For a confirmed complex failure, implement candidate generation/replay in GDScript or the project's existing C# runtime. Use frame/timer primitives and available engine clocks for measured timing. Do not install a test addon solely for shrinking. See `references/advanced/94_multidimensional_counterexample_minimization.md` and `95_native_multidimensional_recipes.md`.
+

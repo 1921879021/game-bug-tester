@@ -215,6 +215,7 @@ Maintainers can use:
 
 - [GitHub setup](docs/GITHUB_SETUP.md)
 - [Release checklist](docs/RELEASE_CHECKLIST.md)
+- [v1.1.0 release notes](RELEASE_NOTES_v1.1.0.md)
 - [v1.0.0 release notes](RELEASE_NOTES_v1.0.0.md)
 
 ## License

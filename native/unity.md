@@ -39,3 +39,7 @@ Do not assume the Unity executable path. Discover it from the environment, proje
 Prefer a path such as `Assets/GameBugTesterGenerated/`. Keep generated files small and removable. Do not overwrite production scripts merely to make a test pass. Report every file added/changed.
 
 A tiny optional harness starter is in `assets/native/unity/`.
+## v1.1 / v3.5 minimization
+
+For a confirmed complex failure, implement the reducer in C# with project-local data structures and replay hooks. Use the project's existing clocks/frames to measure timing. Sequence deletion, parameter ladders, and timing-window search do not require a Python runner. See `references/advanced/94_multidimensional_counterexample_minimization.md` and `95_native_multidimensional_recipes.md`.
+

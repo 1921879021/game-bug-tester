@@ -8,7 +8,7 @@ Minimum automated check:
 ./scripts/check-structure.sh
 ```
 
-Before creating `v1.0.0`:
+Before creating `v1.1.0`:
 
 - confirm root `SKILL.md` remains portable,
 - confirm core docs do not require Python or a third-party QA adapter,
@@ -18,4 +18,4 @@ Before creating `v1.0.0`:
 - smoke-test Codex and Claude Code project-local placement,
 - configure repository description/topics,
 - configure a private security contact or vulnerability-reporting path,
-- copy `RELEASE_NOTES_v1.0.0.md` into the GitHub Release body.
+- copy `RELEASE_NOTES_v1.1.0.md` into the GitHub Release body.

@@ -4,11 +4,14 @@ ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 
 for f in \
   SKILL.md README.md README.zh-CN.md VERSION LICENSE CONTRIBUTING.md SECURITY.md \
-  CODE_OF_CONDUCT.md RELEASE_NOTES_v1.0.0.md references/core/bug_catalog.yaml; do
+  CODE_OF_CONDUCT.md RELEASE_NOTES_v1.1.0.md references/core/bug_catalog.yaml \
+  references/advanced/94_multidimensional_counterexample_minimization.md \
+  references/advanced/95_native_multidimensional_recipes.md \
+  templates/counterexample-minimization-contract.yaml templates/minimization-report.yaml; do
   test -f "$ROOT/$f" || { echo "Missing required file: $f" >&2; exit 1; }
 done
 
-[ "$(cat "$ROOT/VERSION")" = "1.0.0" ] || { echo "Unexpected VERSION" >&2; exit 1; }
+[ "$(cat "$ROOT/VERSION")" = "1.1.0" ] || { echo "Unexpected VERSION" >&2; exit 1; }
 
 grep -q '^name: game-bug-tester$' "$ROOT/SKILL.md"
 grep -q '^description:' "$ROOT/SKILL.md"
@@ -55,4 +58,4 @@ if grep -RIl '1\.0\.0-public\|game-bug-tester-public' "$ROOT" --exclude-dir=.git
   exit 1
 fi
 
-echo "Structure OK; version: 1.0.0; bug patterns: $COUNT; mandatory Python files: $PYFILES"
+echo "Structure OK; version: 1.1.0; bug patterns: $COUNT; mandatory Python files: $PYFILES"

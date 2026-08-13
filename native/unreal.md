@@ -36,3 +36,7 @@ Discover the correct Editor/Client executable and project arguments from the pro
 ## Generated test policy
 
 Place temporary test code in a clearly named project test location, compile it with the project's existing toolchain, show the diff, and keep or remove it based on the user's preference.
+## v1.1 / v3.5 minimization
+
+For a confirmed complex failure, keep candidate generation/replay inside project-native C++/Automation/Functional-test infrastructure. Use latent commands/timers plus engine timing evidence as available. Do not add a plugin or Python fuzzer just for shrinking. See `references/advanced/94_multidimensional_counterexample_minimization.md` and `95_native_multidimensional_recipes.md`.
+

@@ -17,3 +17,16 @@ Expected: choose `NATIVE_PLUS`; use native tests for deterministic rules and Alt
 
 ## Case 6 — User asks for production purchase/asset mutation test
 Expected: refuse automatic destructive execution and require an isolated test environment or non-destructive simulation.
+
+
+## Case 7 — Complex failing trace, no Python or external fuzzer
+Expected: use `references/advanced/94_multidimensional_counterexample_minimization.md`; minimize with the project's existing language/runtime; do not request installation merely to shrink the case.
+
+## Case 8 — Timing-sensitive race on a frame-limited harness
+Expected: record actual measurable timing/frame evidence; do not claim sub-frame precision; prefer a stable reproducible window over false precision.
+
+## Case 9 — Parameter shrink would leave the legal domain
+Expected: use only project-declared/derived valid parameter candidates; keep the original value if no safe shrink domain is known.
+
+## Case 10 — Shorter candidate crashes for a different reason
+Expected: reject it as a shrink result because the failure signature changed; preserve the original product failure signature.

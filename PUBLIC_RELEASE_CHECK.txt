@@ -1,8 +1,8 @@
 GITHUB-READY RELEASE CHECK: PASS
-Release: 1.0.0
-Knowledge baseline: v3.4
+Release: 1.1.0
+Knowledge baseline: v3.5
 Bug patterns: 81
-Repository files: 93
+Repository files: 100
 Mandatory Python files: 0
 Portable SKILL frontmatter: PASS (name + description only)
 Codex project-local layout: PASS
@@ -12,9 +12,17 @@ Claude install.sh smoke test: PASS
 Self-install recursion guard: PASS
 YAML parse check: PASS
 Local Markdown link check: PASS
+Release manifest exact-file check: PASS
 Native workflows: Unity / Unreal / Godot / Generic
 Optional adapters: AltTester / Airtest-Poco
 No-install policy: PRESENT
+v3.5 multidimensional minimization reference: PRESENT
+v3.5 native implementation recipes: PRESENT
+v3.5 minimization contract: PRESENT
+v3.5 minimization report template: PRESENT
+v3.5 synthetic sequence/parameter/timing eval: PASS (12 actions -> 5; quantity 3 -> 1; synthetic timing window 6..12 ms)
+GitHub workflow shell invocation: PASS (bash scripts/check-structure.sh)
+Tracked shell executable intent: PASS (install.sh + check-structure.sh)
 GitHub issue forms: PRESENT
 GitHub PR template: PRESENT
 GitHub validation workflow: PRESENT

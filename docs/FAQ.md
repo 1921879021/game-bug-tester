@@ -39,3 +39,10 @@ Destructive tests are not. Real-money purchases, production currency mutation, d
 ## How should I contribute a new bug pattern?
 
 Include a stable ID, category, prerequisites, trigger, expected invariant/oracle, required evidence, default severity, and false-positive conditions. See `CONTRIBUTING.md` and the issue template.
+
+
+## Does v1.1 multi-dimensional minimization require a fuzzer or Python package?
+
+No. It is specified as an agent-executable algorithm. The coding agent implements the small amount of candidate generation/replay logic in the project's existing language/runtime when needed. Unity can use C#, Unreal can use project-native C++/Automation infrastructure, Godot can use GDScript/C#, and custom engines can use their current test/runtime tooling.
+
+If the project cannot reliably schedule or measure a timing dimension, the agent reports that limitation and uses a coarser or manual matrix rather than installing extra software.

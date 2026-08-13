@@ -122,9 +122,10 @@ Windows PowerShell：
 - 竞态时间窗搜索；
 - Failure Shrinking；
 - Stateful Sequence Fuzzing；
-- Sequence Shrinking。
+- Sequence Shrinking；
+- **多维反例最小化**：同时缩减操作序列、参与者、参数、时序以及项目明确允许变化的环境扰动。
 
-这些是**智能体可以执行的算法流程**，不是要求所有用户先装 Python Runner。
+这些是**智能体可以执行的算法流程**，不是要求所有用户先装 Python Runner。V3.5 仍然要求优先使用项目已有的 Unity/C#、Unreal/C++、Godot/GDScript/C# 或自研引擎工具链来实现，不得为了最小化功能强制安装额外软件。
 
 ## 示例结果
 
@@ -196,6 +197,11 @@ Skill 不会自己编造：
 核心原则：**不能因为一个贡献，让基础使用突然必须安装新的第三方 QA Runtime。**
 
 见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+## 版本说明
+
+- [v1.1.0 Release Notes](RELEASE_NOTES_v1.1.0.md)
+- [v1.0.0 Release Notes](RELEASE_NOTES_v1.0.0.md)
 
 ## License
 

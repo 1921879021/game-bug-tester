@@ -1,0 +1,57 @@
+version: 1.1.0
+knowledge_baseline: v3.5
+
+target:
+  failure_signature: ""
+  target_bug_ids: []
+
+baseline:
+  build_commit: ""
+  engine_version: ""
+  valid_trials: 0
+  failures: 0
+  fail_rate: 0.0
+  action_count: 0
+  distinct_actors: 0
+
+minimized:
+  valid_trials: 0
+  failures: 0
+  fail_rate: 0.0
+  action_count: 0
+  distinct_actors: 0
+  sequence: []
+  ordering:
+    required_constraints: []
+    unnecessary_constraints_removed: []
+  parameters: {}
+  timing:
+    required: false
+    observed_failure_windows_ms: []
+    recommended_replay_offset_ms: null
+    timing_tolerance_ms: null
+    invalid_timing_trials: 0
+  environment: {}
+
+changes:
+  actions_removed: []
+  actors_removed_or_merged: []
+  ordering_changes: []
+  parameters_simplified: []
+  timing_constraints_removed: []
+  environment_reductions: []
+
+not_minimized:
+  - dimension: ""
+    reason: ""
+
+quality:
+  same_failure_signature_preserved: false
+  evaluation_budget_exhausted: false
+  stable_for_regression_test: false
+
+evidence:
+  logs: []
+  state_snapshots: []
+  screenshots: []
+  test_outputs: []

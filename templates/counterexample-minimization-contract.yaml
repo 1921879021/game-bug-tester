@@ -1,0 +1,136 @@
+version: 1.1.0
+knowledge_baseline: v3.5
+name: multidimensional_counterexample_minimization
+safe_environment: true
+
+target:
+  failure_signature: reward_grant_at_most_once
+  target_bug_ids:
+    - NET-007
+    - NET-014
+
+baseline:
+  repeats: 5
+  min_fail_rate: 0.6
+
+candidate:
+  sequence:
+    - id: kill
+      executor: client_a
+      action: kill_player
+      params: {}
+      timing:
+        after_previous_ms: 0
+      shrink:
+        removable: true
+
+    - id: claim_1
+      executor: client_a
+      action: claim_death_reward
+      params:
+        reward_id: death_reward
+        quantity: 3
+      timing:
+        after_previous_ms: 0
+      shrink:
+        removable: true
+        parameters:
+          quantity:
+            type: integer
+            valid_range: [1, 99]
+            candidates: [1]
+          reward_id:
+            type: identifier
+            shrinkable: false
+
+    - id: disconnect
+      executor: server
+      action: disconnect_client
+      params:
+        client_id: client_a
+      timing:
+        after_previous_ms: 12
+      shrink:
+        removable: true
+        timing:
+          shrinkable: true
+          search_range_ms: [0, 50]
+          resolution_ms: 1
+          timing_tolerance_ms: 3
+
+    - id: reconnect
+      executor: server
+      action: reconnect_client
+      params:
+        client_id: client_a
+      timing:
+        after_previous_ms: 20
+      shrink:
+        removable: true
+        timing:
+          shrinkable: true
+          candidates_ms: [0, 1, 5, 10]
+
+    - id: claim_2
+      executor: client_a
+      action: claim_death_reward
+      params:
+        reward_id: death_reward
+        quantity: 3
+      timing:
+        after_previous_ms: 0
+      shrink:
+        removable: true
+        parameters:
+          quantity:
+            type: integer
+            valid_range: [1, 99]
+            candidates: [1]
+
+ordering:
+  shrinkable: true
+  hard_constraints:
+    - before: kill
+      after: claim_1
+    - before: disconnect
+      after: reconnect
+  reorderable_groups:
+    - id: claim_disconnect_window
+      steps: [claim_1, disconnect]
+      strategy: adjacent_swap
+      max_candidates: 2
+
+shrink_order:
+  - sequence
+  - order
+  - actors
+  - parameters
+  - timing
+  - environment
+  - sequence
+
+actors:
+  shrinkable: false
+  reason: client/server identity is part of reconnect semantics
+
+environment:
+  shrinkable: false
+
+preservation:
+  candidate_repeats: 3
+  preserve_fail_rate: 0.67
+  same_failure_signature_required: true
+  invalid_timing_counts_as_failure: false
+
+confirmation:
+  repeats: 10
+
+budget:
+  max_candidate_evaluations: 240
+
+output:
+  include_original: true
+  include_minimized: true
+  include_change_log: true
+  include_actual_timing: true
+  include_unminimized_dimensions: true

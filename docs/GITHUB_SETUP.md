@@ -50,7 +50,7 @@ Leave blank initially unless the project gets a documentation site.
 
 ## Social preview
 
-A social preview image is useful but not required for v1.0.0. If you add one later, keep it simple:
+A social preview image is useful but not required for v1.1.0. If you add one later, keep it simple:
 
 - project name: `Game Bug Tester`
 - subtitle: `Native-first game QA for coding agents`

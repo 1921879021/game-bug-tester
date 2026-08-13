@@ -2,13 +2,16 @@
 
 ## 1.1 — knowledge baseline v3.5
 
-- Multi-dimensional counterexample minimization: action order + parameters + timing.
-- Preserve the zero-mandatory-dependency architecture.
-- Prefer engine-native implementations/examples instead of a mandatory Python runner.
-- Add at least one small public native fixture per major engine where licensing permits.
+Completed in this release:
 
-## Later
+- Multi-dimensional counterexample minimization: action sequence + actors + parameters + timing + declared environment perturbations.
+- Failure-signature preservation and repeated-run gates.
+- Stable timing-window preference and actual-timing evidence.
+- Native-first recipes with no mandatory Python or external QA framework.
 
+## Next
+
+- Add small public native fixtures per major engine where licensing and repository size permit.
 - More Godot native examples.
 - Stronger Unreal multiplayer/Gauntlet recipes.
 - Engine/version capability matrix.

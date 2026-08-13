@@ -21,7 +21,7 @@ jobs:
           test -f CONTRIBUTING.md
           test -f SECURITY.md
           test -f CODE_OF_CONDUCT.md
-          test -f RELEASE_NOTES_v1.0.0.md
+          test -f RELEASE_NOTES_v1.1.0.md
           test -f docs/QUICKSTART.md
           test -f docs/FAQ.md
-          test "$(cat VERSION)" = "1.0.0"
+          test "$(cat VERSION)" = "1.1.0"
